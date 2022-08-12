@@ -28,6 +28,7 @@ def TaiwanChart(request):
   #chartConfig["subcaption"] = "SIRLA 2020-07"
   chartConfig["showLabels"] = "0"
   chartConfig["showLegend"] = "0"
+  chartConfig["height"] =  "100%"
   chartConfig["showMarker"] = "1"
   chartConfig["borderThickness"] = "0.5"
   chartConfig["theme"] = "fusion" # fusion, gammel, candy, umber

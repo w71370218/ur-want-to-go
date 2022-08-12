@@ -1,13 +1,24 @@
+html {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
 .container {
 	display: flex;
 }
 
+.TaiwanChart {
+	height: 100%;
+	bottom: 0;
+}
 .navbar {
 	list-style-type: none;
     margin: 0;
     padding: 0;
 	text-align: center;
 	background-color: black;
+	width: 100%;
 }
 
 .navbar a {
@@ -115,4 +126,11 @@ img {
 .btn-group {
 	display: inline-flex; 
 	height: 30px;
+}
+
+@media screen and (max-width: 1190px){
+	#TaiwanChart-container{
+		width:100%;
+		right: 0;
+	}
 }
