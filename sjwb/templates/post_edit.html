@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}
+	<title>我要推薦 | SIRLA 許願瓶</title>
+{% endblock %}
+	{% block content %}
+	<h1>我要推薦</h1>
+	
+	<form method="POST" class="post-form" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" class="save btn btn-default">Save</button>
+	</form>
+	{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+	<title>{{ post.title }} | SIRLA 許願瓶</title>
+{% endblock %}
+
+{% block content %}
+	<div class="post-detail">
+		<div class="post-img">
+            {% if post.photo.url is not null %}
+                <img class="post-img-top" src="{{ post.photo.url }}">
+            {% else %}
+                <img class="post-img-top" src="/media/no_image.jpg">
+            {% endif %}
+        </div>
+		<span><a href="#" class="badge badge-secondary">{{ post.tag.name }}</a></span>
+		<h2><a href="#">{{ post.title }}</a></h2>
+        <p><span class="glyphicon">&#xe023;</span> {{ post.created_date }}</p>
+		<p>{{ post.text|linebreaks }}</p>
+        <div>
+            <p><span class="glyphicon">&#xe062;</span> {{ post.location }}</p>
+            {% if post.category != 1 %}
+                <p><span class="glyphicon">&#xe183;</span> {{ post.phone_number }}</p>
+            {% endif %}
+            <span class="glyphicon">&#xe005;</span>
+            <span class="text-muted likes-total{{ post.id }}">{{ post.liked.all.count }}</span>
+        </div>
+        <div class="btn-group">
+        {% if request.user.is_authenticated %}
+            {% if request.user.id != post.author.id %}
+                <form action="{% url 'like_post' %}" id="{{ post.id }}" method="POST" class="like-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="post_pk" id="{{ post.id }}" value="{{ post.pk }}">
+                    <button type="submit" class="btn btn-default btn-sm btn-outline-secondary like-btn{{ post.id }}">
+                        {% if user not in post.liked.all %}
+                            Like
+                    </button>
+                        {% else %}
+                            Unlike
+                    </button>
+                        {% endif %}
+                    </form>
+                    <button type="submit" class="btn btn-default btn-sm btn-outline-secondary">Comment</button>
+            {% else %}
+                <form action="{% url 'like_post' %}" id="{{ post.id }}" method="POST" class="like-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="post_pk" id="{{ post.id }}" value="{{ post.pk }}">
+                    <button type="submit" class="btn btn-default btn-sm btn-outline-secondary like-btn{{ post.id }}">
+                        {% if user not in post.liked.all %}
+                            Like
+                        </button>
+                        {% else %}
+                             Unlike
+                         </button>
+                        {% endif %}
+                    </form>
+                    <button type="button" class="btn btn-default btn-sm btn-outline-secondary">
+                        <a href="{% url 'post_edit' pk=post.pk%}" style="text-decoration:none; color: inherit;">Edit</a>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm btn-outline-secondary">
+                        <a href="{% url 'post_delete' pk=post.pk %}" style="text-decoration:none; color: inherit;">Delete</a>
+                    </button>
+            {% endif %}
+        {% endif %}
+        {% for co in comment %}
+            <div>
+                {{ co.comment_man }}說：{{ co.comment_content }}
+                <small class="text-muted comment_date">{{ co.comment_date }}</small>
+            </div>
+        {% endfor %}
+{% endblock %}

@@ -1,0 +1,118 @@
+.container {
+	display: flex;
+}
+
+.navbar {
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+	text-align: center;
+	background-color: black;
+}
+
+.navbar a {
+	color: white;
+}
+
+.sidebar {
+	width:20%;
+}
+
+.title {
+	font-size: 150%;
+	overflow: hidden;
+	max-width: 300px;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	white-space: normal;
+}
+
+.col-md-4 {
+	width: 360px;
+	margin-right: 2rem;
+	margin-top: 2rem;
+}
+
+.post-body{
+	padding:0 2rem 1rem;
+}
+
+.box-shadow { 
+	width: 360px;
+	box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .25); 
+}
+
+.raphael-group-48-fc-gradient-legend {
+    display: none;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+    margin: auto;
+    position: absolute;
+}
+
+.img {
+	height: 225px;
+	width: 360px;
+    border:1px;
+    position: relative;
+}
+
+.img .bg{
+	-webkit-filter:blur(3px) opacity(0.5);
+	max-width: 100%;
+    max-height: 100%;
+}
+
+.post-img{
+	height: 100%;
+	width: 100%;
+    border:1px;
+    position: relative;
+}
+
+.post-detail {
+	margin-top: 2rem;
+	height: 50%;
+	width: 80%;
+}
+
+.post-text {
+	height: 72px;
+	max-width: 300px;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	white-space: normal;
+}
+
+.post-location {
+	height: 24px;
+	max-width: 300px;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	white-space: normal;
+}
+
+.comment-body {
+	height: 96px;
+	line-height: 24px;
+	overflow: hidden;
+	display:inline-block;
+}
+
+.btn-group {
+	display: inline-flex; 
+	height: 30px;
+}

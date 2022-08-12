@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}
+	<title>想要去玩的地點</title>
+{% endblock %}
+
+{% block content %}
+	{% if request.user.is_superuser %}
+		<p>Welcome, {{ user.username }}</p>
+	{% elif request.user.is_authenticated %}
+		<p>Welcome, {{ user.username }}</p>
+	{% endif %}
+
+	<!-- Taiwan Map -- START -->
+		{% include "home/index.html" %}
+	<!-- Taiwan Map -- END -->
+
+{% endblock %}
