@@ -130,7 +130,3 @@ STATICFILES_DIRS = (
 )
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
-ALLOWED_HOSTS = [
-    'ur-want-to-go.herokuapp.com/'
-]
