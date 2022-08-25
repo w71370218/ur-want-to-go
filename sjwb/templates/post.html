@@ -8,7 +8,7 @@
 	<div class="post-detail">
 		<div class="post-img">
             {% if post.photo.url is not null %}
-                <img class="post-img-top" src="{{ post.photo.url }}">
+                <img class="post-img-top" src="{% static {{ post.photo.url }} %}">
             {% else %}
                 <img class="post-img-top" src="/media/no_image.jpg">
             {% endif %}
