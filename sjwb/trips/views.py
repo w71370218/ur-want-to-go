@@ -6,6 +6,11 @@ from django.utils import timezone
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
+from django.conf import settings
+#imgur
+import pyimgur
+CLIENT_ID = settings.CLIENT_ID
+im = pyimgur.Imgur(CLIENT_ID)
 
 def home(request):
 	return render(request, 'home.html'
@@ -118,6 +123,16 @@ def post_new(request):
 			post.author = request.user
 			post.published_date = timezone.now()
 			post.save()
+			if post.photo:
+				#print(post.photo,post.photo.url,post.photo.path)
+				PATH = post.photo.path #A Filepath to an image on your computer"
+				title = post.title
+				uploaded_image = im.upload_image(PATH, title=title)
+				#print(uploaded_image.title)
+				#print(uploaded_image.link)
+				#print(uploaded_image.type)
+				post.imgur_url = uploaded_image.link
+				post.save()
 			return redirect('post_detail', pk=post.pk)
 	else:
 		form = PostForm()

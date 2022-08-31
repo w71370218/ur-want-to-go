@@ -45,6 +45,7 @@ class Post(models.Model):
 	phone_number = models.CharField(max_length=12,blank=True, null=True, help_text='類型是住宿或餐廳才要填')
 	tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 	photo = models.ImageField(upload_to='img/',blank=True, null=True)
+	imgur_url = models.URLField(blank=True, null=True)
 	created_date = models.DateTimeField(default=timezone.now)
 	published_date = models.DateTimeField(blank=True, null=True) 
 	liked = models.ManyToManyField(User,default=None,blank=True)
