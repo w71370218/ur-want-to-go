@@ -21,16 +21,22 @@ html {
 .navbar {
 	list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding: 1em;
 	text-align: center;
+	
 	background-color: black;
 	width: 100%;
 }
 
 .navbar a {
 	color: white;
+	display: flex;
+	align-content: center;
 }
 
+.navbar-brand{
+	padding-top: 0.5em;
+}
 .sidebar {
 	width:20%;
 }
@@ -49,6 +55,11 @@ html {
 	width: 360px;
 	margin-right: 2rem;
 	margin-top: 2rem;
+}
+
+.row {
+	margin-right: 0;
+	margin-left: 0;
 }
 
 .post-body{
@@ -90,7 +101,7 @@ img {
 }
 
 .post-img{
-	height: 100%;
+	height: 50vh;
 	width: 100%;
     border:1px;
     position: relative;
@@ -98,8 +109,9 @@ img {
 
 .post-detail {
 	margin-top: 2rem;
-	height: 50%;
-	width: 80%;
+	width: 100%;
+	padding-left: 1em;
+	padding-right: 1em;
 }
 
 .post-text {
@@ -139,11 +151,42 @@ img {
 		width: 100%;
 		bottom: 0;
 	}
+	.navbar {
+		padding: 0.1em;
+		min-height: 50px;
+	}
    }
 @media screen and (max-width:1080px){ 
-	body {
-			background-color: black;
-		}
+	.navbar {
+		min-height: 120px;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 1040;
+		font-size: 16px;
+		padding: 1em;
+	}
+	.navbar-brand, .navbar-nav>li>a {
+		font-size: 50px;
+	}
+	
+	.title {
+		font-size: 150%;
+		overflow: hidden;
+		max-width: 300px;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		white-space: normal;
+	}
+	
+	.col-md-4 {
+		width:100%;
+		margin-right: 2rem;
+		margin-top: 2rem;
+	}
+	
 	.TaiwanChart {
 		height: 100%;
 		width: 100%;
@@ -151,5 +194,72 @@ img {
 	}
 	#TaiwanChart-container {
 		width: 100%;
+	}
+	.navbar-right {
+		float: none!important;
+	}
+	.container {
+		width:100%;
+	}
+	.row {
+		width:100%;
+	}
+	
+	.post, .mb-4, .box-shadow {
+		width:100%;
+	}
+	.post-text {
+		max-width:100%;
+	}
+	.img {
+		width: 100%;
+		height:50vh;
+	}
+	.badge {
+		font-size: 35px;
+		min-width: 75px;
+	}
+	.title {
+		font-size: 64px;
+		display: block;
+		max-width: 100%;
+	}
+	.post-text {
+		min-height: 8vh;
+		max-width: 100%;
+		font-size: 40px;
+	}
+	.post-body {
+		font-size: 35px;
+	}
+	.btn-group {
+		width: 100%;
+		display: flex;
+		align-items: baseline;
+		
+		
+	}
+	.btn-group button {
+		width: 100%;
+		min-height: 60px;
+		font-size: 40px;
+	}
+	form button {
+		min-height: 60px;
+		font-size: 40px;
+		min-width: 60px;
+	}
+	form {
+		display: flex;
+		align-content: space-around;
+	}
+	form input {
+		width: 100%;
+	}
+	.post-img {
+		width: 100%;
+	}
+	.post-detail {
+		font-size: 50px;
 	}
 }

@@ -14,9 +14,11 @@
             {% endif %}
         </div>
 		<span><a href="#" class="badge badge-secondary">{{ post.tag.name }}</a></span>
-		<h2><a href="#">{{ post.title }}</a></h2>
+		<h2 class="title">{{ post.title }}</h2>
         <p><span class="glyphicon">&#xe023;</span> {{ post.created_date }}</p>
-		<p>{{ post.text|linebreaks }}</p>
+        <div >
+            <p>{{ post.text|linebreaks }}</p>
+        </div>
         <div>
             <p><span class="glyphicon">&#xe062;</span> {{ post.location }}</p>
             {% if post.category != 1 %}
