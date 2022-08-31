@@ -4,4 +4,4 @@ __pycache__
 staticfiles
 db.sqlite3
 .DS_Store
-sjwb/media/img/*
+media/img/*
