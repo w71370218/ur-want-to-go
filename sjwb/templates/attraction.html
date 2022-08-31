@@ -25,7 +25,7 @@
                                 <div class="img">
                                     {% if post.imgur_url is not null %}
                                         <div class="img bg" style="background: url({{ post.imgur_url }});"></div>
-                                        <img class="post-img-top" src="{{ post.photo.url }}">
+                                        <img class="post-img-top" src="{{ post.imgur_url }}">
                                     {% else %}
                                         <div class="img bg" style="background: url('/media/img/no_image.jpg');"></div>
                                         <img class="post-img-top" src="/media/no_image.jpg">
