@@ -28,7 +28,7 @@ def TaiwanChart(request):
   #chartConfig["subcaption"] = "SIRLA 2020-07"
   chartConfig["showLabels"] = "0"
   chartConfig["showLegend"] = "0"
-  chartConfig["height"] =  "100%"
+
   chartConfig["showMarker"] = "1"
   chartConfig["borderThickness"] = "0.5"
   chartConfig["theme"] = "fusion" # fusion, gammel, candy, umber
@@ -74,6 +74,6 @@ def TaiwanChart(request):
 
   # Create an object for the map using the FusionCharts class constructor 
   # The chart data is passed to the `dataSource` parameter.
-  fusionMap = FusionCharts("maps/taiwan", "TaiwanChart", "950", "750", "TaiwanChart-container", "json", dataSource)
+  fusionMap = FusionCharts("maps/taiwan", "TaiwanChart", "700", "620", "TaiwanChart-container", "json", dataSource)
   # returning complete JavaScript and HTML code, which is used to generate map in the browsers. 
-  return render(request, 'home.html', {'output': fusionMap.render(), 'chartTitle': '台灣地圖'})
+  return render(request, 'home.html', {'output': fusionMap.render()})
