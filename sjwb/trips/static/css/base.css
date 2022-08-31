@@ -225,9 +225,13 @@ img {
 		max-width: 100%;
 	}
 	.post-text {
-		min-height: 8vh;
+		min-height: 8.5vh;
 		max-width: 100%;
 		font-size: 40px;
+	}
+	.post-location {
+		min-height: 50px;
+		max-width: 100%;
 	}
 	.post-body {
 		font-size: 35px;
