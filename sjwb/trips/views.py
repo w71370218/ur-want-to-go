@@ -23,13 +23,15 @@ def home(request):
 	style_accomodation = {'color': 'blue', 'icon':'bed', 'prefix':'fa'}
 
 	for post in posts:
-		popup = '<h1>' + post.title + '</h1>'
-		#popup = '<a href="' + reverse('trip.view.post_detail') + '"><p>' + post.title + '</p></a>'
+		#popup = '<h1>' + post.title + '</h1>'
+		popup = '<div class="popup"><a href="/post/'+ str(post.pk) +'" target="_parent" style="text-decoration: none;"><h1>' + post.title + '</h1>'\
+			+ '<h4>'+ post.location +'</h4>'\
+			+ '<h4>想去指數: '+ str(post.stars)+'</h4>'
 		if post.imgur_url:
 			print("YES")
-			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;">'
+			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a>'
 		else:
-			popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;">'
+			popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;"></a></div>'
 		match post.category:
 			case 1:
 				color = 'red'

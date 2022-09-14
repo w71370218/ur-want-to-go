@@ -4,6 +4,10 @@ html {
 	padding: 0;
 }
 
+a{
+	text-decoration: none;
+}
+
 .map {
 	position: fixed;
 	height: 100%;
