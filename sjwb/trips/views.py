@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.conf import settings
+from django.urls import reverse
 import folium
 #imgur
 import pyimgur
@@ -16,19 +17,31 @@ im = pyimgur.Imgur(CLIENT_ID)
 def home(request):
 	posts = Post.objects.all()
 	
-	m = folium.Map(location=[24.028,120.8], zoom_start=8, control_scale = True)
+	m = folium.Map(location=[23.97565,120.9738819], zoom_start=8, height="100%", position="initial")
 	style_attraction = {'color': 'red'}
 	style_restaurant = {'color': 'green', 'icon':'utensils', 'prefix':'fa'}
 	style_accomodation = {'color': 'blue', 'icon':'bed', 'prefix':'fa'}
 
 	for post in posts:
 		popup = '<p>' + post.title + '</p>'
+		#popup = '<a href="' + reverse('trip.view.post_detail') + '"><p>' + post.title + '</p></a>'
 		if post.imgur_url:
 			print("YES")
 			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:200px;">'
 		else:
 			popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:200px;">'
-		m2 = folium.Marker(location=[post.lat, post.lng], popup=popup) # 使用Font Awesome Icons
+		match post.category:
+			case 1:
+				color = 'red'
+				icon = ''
+			case 2:
+				color = 'blue'
+				icon = 'bed'
+			case 3:
+				color = 'green'
+				icon = 'cutlery'
+		
+		m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=folium.Icon(icon=icon, color=color, prefix='fa')) # 使用Font Awesome Icons
 		m2.add_to(m)
 	folium.LayerControl().add_to(m)
 

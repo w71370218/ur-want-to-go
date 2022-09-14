@@ -4,6 +4,12 @@ html {
 	padding: 0;
 }
 
+.map {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+}
+
 .container {
 	display: flex;
 }
@@ -173,11 +179,6 @@ img {
 		margin-top: 2rem;
 	}
 	
-	.TaiwanChart {
-		height: 100%;
-		width: 100%;
-		bottom: 0;
-	}
 	.navbar-right {
 		float: none!important;
 	}
