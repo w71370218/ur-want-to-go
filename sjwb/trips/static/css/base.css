@@ -8,16 +8,6 @@ html {
 	display: flex;
 }
 
-.TaiwanChart {
-	bottom: 0;
-	display: flex;
-	justify-content: center;
-}
-
-.TaiwanChart h3 {
-	display: none;
-}
-
 .navbar {
 	list-style-type: none;
     margin: 0;
@@ -147,10 +137,6 @@ img {
 }
 
 @media screen and (min-width:720px){ 
-	.TaiwanChart {
-		width: 100%;
-		bottom: 0;
-	}
 	.navbar {
 		padding: 0.1em;
 		min-height: 50px;
@@ -191,9 +177,6 @@ img {
 		height: 100%;
 		width: 100%;
 		bottom: 0;
-	}
-	#TaiwanChart-container {
-		width: 100%;
 	}
 	.navbar-right {
 		float: none!important;

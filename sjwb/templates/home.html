@@ -4,14 +4,10 @@
 {% endblock %}
 
 {% block content %}
-	{% if request.user.is_superuser %}
-		<p>Welcome, {{ user.username }}</p>
-	{% elif request.user.is_authenticated %}
-		<p>Welcome, {{ user.username }}</p>
-	{% endif %}
-
-	<!-- Taiwan Map -- START -->
-		{% include "home/index.html" %}
-	<!-- Taiwan Map -- END -->
-
+	<div class="row">
+		<div class="text-center" style="height: 100%;">
+				{{ my_map|safe }}
+			</div>
+	</div>
+	
 {% endblock %}

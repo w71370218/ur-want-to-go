@@ -19,12 +19,12 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views
-from trips.views import attraction, accomodation, restaurant, post_detail, post_new, post_delete, post_edit, register, area, like_post, post_serialized_view, post_new_comment
+from trips.views import home, attraction, accomodation, restaurant, post_detail, post_new, post_delete, post_edit, register, area, like_post, post_serialized_view, post_new_comment
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('home.urls')),
+    path('', home, name="home"),
     path('Like',like_post,name='like_post'),
     path('serialized/', post_serialized_view, name='serialized_view'),
     path('area/', area, name="area"),

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator
 
 class Tag(models.Model):
 	name = models.CharField(max_length=10)
@@ -49,7 +50,9 @@ class Post(models.Model):
 	created_date = models.DateTimeField(default=timezone.now)
 	published_date = models.DateTimeField(blank=True, null=True) 
 	liked = models.ManyToManyField(User,default=None,blank=True)
-	stars = models.IntegerField(max_length=1, default=1, help_text='<font color="red">*必填</font>')
+	stars = models.IntegerField(max_length=1, default=1, help_text='<font color="red">*必填</font>',validators=[MaxValueValidator(5)])
+	lat  = models.FloatField(default=1, help_text='<font color="red">*必填</font>')
+	lng = models.FloatField(default=1, help_text='<font color="red">*必填</font>')
 
 	def publish(self):
 		self.published_date = timezone.now()

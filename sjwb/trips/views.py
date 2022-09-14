@@ -7,13 +7,34 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.conf import settings
+import folium
 #imgur
 import pyimgur
 CLIENT_ID = settings.CLIENT_ID
 im = pyimgur.Imgur(CLIENT_ID)
 
 def home(request):
-	return render(request, 'home.html'
+	posts = Post.objects.all()
+	
+	m = folium.Map(location=[24.028,120.8], zoom_start=8, control_scale = True)
+	style_attraction = {'color': 'red'}
+	style_restaurant = {'color': 'green', 'icon':'utensils', 'prefix':'fa'}
+	style_accomodation = {'color': 'blue', 'icon':'bed', 'prefix':'fa'}
+
+	for post in posts:
+		popup = '<p>' + post.title + '</p>'
+		if post.imgur_url:
+			print("YES")
+			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:200px;">'
+		else:
+			popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:200px;">'
+		m2 = folium.Marker(location=[post.lat, post.lng], popup=popup) # 使用Font Awesome Icons
+		m2.add_to(m)
+	folium.LayerControl().add_to(m)
+
+	m=m._repr_html_()
+	context = {'my_map': m}
+	return render(request, 'home.html', context
 		)
 
 def area(request):
