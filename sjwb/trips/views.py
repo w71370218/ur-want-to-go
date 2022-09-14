@@ -23,13 +23,13 @@ def home(request):
 	style_accomodation = {'color': 'blue', 'icon':'bed', 'prefix':'fa'}
 
 	for post in posts:
-		popup = '<p>' + post.title + '</p>'
+		popup = '<h1>' + post.title + '</h1>'
 		#popup = '<a href="' + reverse('trip.view.post_detail') + '"><p>' + post.title + '</p></a>'
 		if post.imgur_url:
 			print("YES")
-			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:200px;">'
+			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;">'
 		else:
-			popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:200px;">'
+			popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;">'
 		match post.category:
 			case 1:
 				color = 'red'
