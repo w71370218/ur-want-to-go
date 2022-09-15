@@ -7,6 +7,8 @@ from django.core.validators import MaxValueValidator
 class Tag(models.Model):
 	name = models.CharField(max_length=10)
 	color = models.CharField(max_length=7, default='#ff0000')
+	icon = models.CharField(max_length=100,null=True, blank=True)
+	img = models.ImageField(upload_to='icon/',blank=True, null=True)
 	# 讓它改成顯示名稱
 	def __str__(self):
 		return self.name

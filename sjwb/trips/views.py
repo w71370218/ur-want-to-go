@@ -39,6 +39,7 @@ import json
 currDir = os.path.dirname(__file__)
 mediaDir = os.path.join(os.path.split(currDir)[0], "media")
 map_dir = os.path.join(mediaDir ,'map')
+icon_dir = os.path.join(mediaDir ,'icon')
 
 county_map_file = open(os.path.join(map_dir,'County.geojson'), encoding='utf-8').read()
 
@@ -108,23 +109,34 @@ def home(request):
 			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a>'
 		else:
 			popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;"></a></div>'
-		
-		if post.tags == None:
-			print("YES")
-		else:
-			print("N")
+
 		match post.category:
 			case 1:
 				color = 'red'
-				icon = ''
 			case 2:
 				color = 'blue'
-				icon = 'bed'
 			case 3:
 				color = 'green'
-				icon = 'cutlery'
+		icon_config = False
 		
-		m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=folium.Icon(icon=icon, color=color, prefix='fa')) # 使用Font Awesome Icons
+		if post.tags.all():
+			for tag in post.tags.all():
+				if tag.img:
+					print(tag.img.path)
+					prefix = ''
+					icon = folium.features.CustomIcon(tag.img.path,icon_size=(30, 30))
+					m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=icon, color=color)
+					icon_config = True
+					break;
+		if not icon_config:
+			match post.category:
+				case 1:
+					icon = ''
+				case 2:
+					icon = 'bed'
+				case 3:
+					icon = 'cutlery'
+			m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=folium.Icon(icon=icon, color=color,prefix ='fa')) # 使用Font Awesome Icons
 		m2.add_to(mCluster)
 	
 	folium.LayerControl().add_to(m)
