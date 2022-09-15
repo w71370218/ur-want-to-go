@@ -24,12 +24,14 @@ a{
     padding: 1em;
 	text-align: center;
 	
-	background-color: black;
+	background-color: #343a40;
 	width: 100%;
+
+	border-radius: 0;
 }
 
 .navbar a {
-	color: white;
+	color: rgba(255,255,255,.75);
 	display: flex;
 	align-content: center;
 }
