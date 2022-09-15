@@ -28,12 +28,12 @@ with open('County.zip', 'wb') as file:
 	file.write(response.content)
 	file.close()
 """
-counties_gdf = geopandas.read_file('County.zip')
+
 
 def home(request):
 	posts = Post.objects.all()
 	
-
+	counties_gdf = geopandas.read_file('County.zip')
 	#map
 	m = folium.Map(location=[23.97565,120.9738819], zoom_start=8, height="100%", position="initial")
 
