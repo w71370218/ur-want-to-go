@@ -8,6 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse
+#folium
 import folium
 from folium.plugins import MarkerCluster
 #imgur
@@ -24,7 +25,7 @@ def home(request):
 	style_restaurant = {'color': 'green', 'icon':'utensils', 'prefix':'fa'}
 	style_accomodation = {'color': 'blue', 'icon':'bed', 'prefix':'fa'}
 	
-	mCluster = MarkerCluster(name="Markers Demo").add_to(m)
+	mCluster = MarkerCluster(name="景點數量").add_to(m)
 
 	for post in posts:
 		#popup = '<h1>' + post.title + '</h1>'
@@ -179,10 +180,12 @@ def post_new(request):
 				#print(post.photo,post.photo.url,post.photo.path)
 				PATH = post.photo.path #A Filepath to an image on your computer"
 				title = post.title
+				print(CLIENT_ID)
 				uploaded_image = im.upload_image(PATH, title=title)
-				#print(uploaded_image.title)
-				#print(uploaded_image.link)
-				#print(uploaded_image.type)
+				
+				print(uploaded_image.title)
+				print(uploaded_image.link)
+				print(uploaded_image.type)
 				post.imgur_url = uploaded_image.link
 				post.save()
 			return redirect('post_detail', pk=post.pk)
