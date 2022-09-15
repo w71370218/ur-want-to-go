@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
 	<div class="post-detail">
 		<div class="post-img">
             {% if post.photo.url is not null %}
@@ -30,7 +31,7 @@
             </span>
         </p>
         <div >
-            <p>{{ post.text | markdown | safe }}</p>
+            <p>{{ post.text | markdown | safe | linebreaks }}</p>
         </div>
         <div>
             <p><span class="glyphicon">&#xe062;</span> {{ post.location }}</p>
@@ -83,4 +84,5 @@
                 <small class="text-muted comment_date">{{ co.comment_date }}</small>
             </div>
         {% endfor %}
+</div>
 {% endblock %}

@@ -16,10 +16,28 @@ import pyimgur
 CLIENT_ID = settings.CLIENT_ID
 im = pyimgur.Imgur(CLIENT_ID)
 
+import requests
+import geopandas
+
+# webparser
+map_url =  'https://data.moi.gov.tw/MoiOD'
+href="/System/DownloadFile.aspx?DATA=72874C55-884D-4CEA-B7D6-F60B0BE85AB0"
+response = requests.get(map_url + href)
+with open('County.zip', 'wb') as file:
+	file.write(response.content)
+	file.close()
+counties_gdf = geopandas.read_file('County.zip')
+
 def home(request):
 	posts = Post.objects.all()
 	
+
+	#map
 	m = folium.Map(location=[23.97565,120.9738819], zoom_start=8, height="100%", position="initial")
+
+	# County layer
+	folium.GeoJson(data=counties_gdf["geometry"], name="縣市分區").add_to(m)
+
 	marker_cluster = MarkerCluster(control=False).add_to(m)
 	style_attraction = {'color': 'red'}
 	style_restaurant = {'color': 'green', 'icon':'utensils', 'prefix':'fa'}
