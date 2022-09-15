@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 #建立首頁
-from trips.models import Post, Like, Tag, Comment
+from trips.models import Post, Tag, Comment
 from .forms import PostForm, post_comment_form
 from django.utils import timezone
 from django.contrib.auth.forms import UserCreationForm
@@ -48,7 +48,28 @@ county_features = county_map_json["features"]
 for e in county_map_json["features"][0]["properties"]["COUNTYNAME"]:
 	print(e)
 """
-
+AREA_CHOICES=((1,'基隆市'),
+	(2,'台北市'),
+	(3,'新北市'),
+	(4,'桃園市'),
+	(5,'新竹縣'),
+	(6, '新竹市'),
+	(7, '苗栗縣'),
+	(8, '南投縣'),
+	(9, '台中市'),
+	(10, '彰化縣'),
+	(11, '雲林縣'),
+	(12, '嘉義縣'),
+	(13, '嘉義市'),
+	(14, '台南市'),
+	(15, '高雄市'),
+	(16, '屏東縣'),
+	(17, '台東縣'),
+	(18, '宜蘭縣'),
+	(19, '花蓮縣'),
+	(20, '澎湖縣'),	
+	(21, '金門縣'),
+	(22, '連江縣'),)
 
 def home(request):
 	posts = Post.objects.all()
@@ -59,6 +80,7 @@ def home(request):
 	# County layer
 	style_county = {'color': 'rgba(41, 152, 202, 0.5)', 'line_opacity': 0.2 }
 	for geo in county_features:
+		geo["id"] = geo["properties"]["COUNTYID"]
 		county = folium.GeoJson(geo, name='縣市分區', style_function=lambda x:style_county, tooltip=geo["properties"]["COUNTYNAME"] ).add_to(m)
 	
 
@@ -86,6 +108,11 @@ def home(request):
 			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a>'
 		else:
 			popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;"></a></div>'
+		
+		if post.tags == None:
+			print("YES")
+		else:
+			print("N")
 		match post.category:
 			case 1:
 				color = 'red'
@@ -119,28 +146,7 @@ def area(request):
 			area_ID+=str(s)
 		count+=1
 	post = Post.objects.filter(area=area_ID).order_by('-created_date')
-	AREA_CHOICES=((1,'基隆市'),
-		(2,'台北市'),
-		(3,'新北市'),
-		(4,'桃園市'),
-		(5,'新竹縣'),
-		(6, '新竹市'),
-		(7, '苗栗縣'),
-		(8, '南投縣'),
-		(9, '台中市'),
-		(10, '彰化縣'),
-		(11, '雲林縣'),
-		(12, '嘉義縣'),
-		(13, '嘉義市'),
-		(14, '台南市'),
-		(15, '高雄市'),
-		(16, '屏東縣'),
-		(17, '台東縣'),
-		(18, '宜蘭縣'),
-		(19, '花蓮縣'),
-		(20, '澎湖縣'),	
-		(21, '金門縣'),
-		(22, '連江縣'),)
+
 	area_title = AREA_CHOICES[int(area_ID)-1][1]
 	user = request.user
 	art_comment = []
@@ -221,14 +227,14 @@ def post_new(request):
 				#print(post.photo,post.photo.url,post.photo.path)
 				PATH = post.photo.path #A Filepath to an image on your computer"
 				title = post.title
-				print(CLIENT_ID)
 				uploaded_image = im.upload_image(PATH, title=title)
 				
-				print(uploaded_image.title)
-				print(uploaded_image.link)
-				print(uploaded_image.type)
+				#print(uploaded_image.title)
+				#print(uploaded_image.link)
+				#print(uploaded_image.type)
 				post.imgur_url = uploaded_image.link
 				post.save()
+			form.save_m2m()
 			return redirect('post_detail', pk=post.pk)
 	else:
 		form = PostForm()
@@ -243,11 +249,22 @@ def post_edit(request, pk):
 	post = get_object_or_404(Post, pk=pk)
 	if request.method == "POST":
 		form = PostForm(request.POST,request.FILES, instance=post)
+		print(request.FILES)
 		if form.is_valid():
 			post = form.save(commit=False)
 			post.author = request.user
 			post.published_date = timezone.now()
 			post.save()
+			if request.FILES:
+				PATH = post.photo.path #A Filepath to an image on your computer"
+				title = post.title
+				uploaded_image = im.upload_image(PATH, title=title)
+				#print(uploaded_image.title)
+				#print(uploaded_image.link)
+				#print(uploaded_image.type)
+				post.imgur_url = uploaded_image.link
+				post.save()
+			form.save_m2m()
 			return redirect('post_detail', pk=post.pk)
 	else:
 		form = PostForm(instance=post)

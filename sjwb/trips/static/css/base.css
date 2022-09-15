@@ -52,6 +52,10 @@ a{
 	-webkit-box-orient: vertical;
 	white-space: normal;
 }
+.date {
+	font-size: 80%;
+	color: #5b6670;
+}
 
 .col-md-4 {
 	width: 360px;
@@ -62,6 +66,7 @@ a{
 .row {
 	margin-right: 0;
 	margin-left: 0;
+	margin-bottom: 3rem;
 }
 
 .post-body{
@@ -146,6 +151,12 @@ img {
 .btn-group {
 	display: inline-flex; 
 	height: 30px;
+}
+
+.tag-group {
+	min-height: 2em;
+	display: flex;
+	align-items: center;
 }
 
 @media screen and (min-width:720px){ 

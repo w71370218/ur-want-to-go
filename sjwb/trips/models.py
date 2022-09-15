@@ -6,6 +6,7 @@ from django.core.validators import MaxValueValidator
 
 class Tag(models.Model):
 	name = models.CharField(max_length=10)
+	color = models.CharField(max_length=7, default='#ff0000')
 	# 讓它改成顯示名稱
 	def __str__(self):
 		return self.name
@@ -44,7 +45,7 @@ class Post(models.Model):
 	
 	location = models.CharField(max_length=100, help_text='<font color="red">*必填</font>')
 	phone_number = models.CharField(max_length=12,blank=True, null=True, help_text='類型是住宿或餐廳才要填')
-	tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+	tags = models.ManyToManyField(Tag,default=None,blank=True)
 	photo = models.ImageField(upload_to='img/',blank=True, null=True)
 	imgur_url = models.URLField(blank=True, null=True)
 	created_date = models.DateTimeField(default=timezone.now)
@@ -79,20 +80,6 @@ photo			照片
 created_date
 published_date
 '''
-
-LIKE_CHOICES=(
-	('Like','Like'),
-	('Unlike','Unlike'),
-	)
-
-
-class Like(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
-	post = models.ForeignKey(Post, on_delete=models.CASCADE)
-	value = models.CharField(choices=LIKE_CHOICES,default='Like', max_length=10)
-
-	def __str__(self):
-		return self.post
 
 class Comment(models.Model):
 	comment_post = models.ForeignKey('post', on_delete=models.CASCADE)
