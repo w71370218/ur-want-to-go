@@ -8,4 +8,4 @@ admin.site.register(Post, PostAdmin)
 admin.site.register(Tag)
 admin.site.register(Comment)
 
-admin.site.site_url = 'http://127.0.0.1:8000'
+admin.site.site_url = '/'
