@@ -42,8 +42,10 @@ def home(request):
 	m = folium.Map(location=[23.97565,120.9738819], zoom_start=8, height="100%", position="initial")
 	
 	# County layer
-	print(os.getcwd())
-	map_dir = os.path.join(os.getcwd(),'media','map')
+	currDir = os.path.dirname(__file__)
+	mediaDir = os.path.join(os.path.split(currDir)[0], "media")
+	map_dir = os.path.join(mediaDir ,'map')
+	
 	f = open(os.path.join(map_dir,'County.geojson'), encoding='utf-8').read()
 	folium.GeoJson(f,name='縣市分區').add_to(m)
 
