@@ -20,12 +20,14 @@ import requests
 import geopandas
 
 # webparser
+"""
 map_url =  'https://data.moi.gov.tw/MoiOD'
 href="/System/DownloadFile.aspx?DATA=72874C55-884D-4CEA-B7D6-F60B0BE85AB0"
 response = requests.get(map_url + href)
 with open('County.zip', 'wb') as file:
 	file.write(response.content)
 	file.close()
+"""
 counties_gdf = geopandas.read_file('County.zip')
 
 def home(request):
