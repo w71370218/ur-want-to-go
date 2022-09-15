@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse
 import folium
+from folium.plugins import MarkerCluster
 #imgur
 import pyimgur
 CLIENT_ID = settings.CLIENT_ID
@@ -18,17 +19,28 @@ def home(request):
 	posts = Post.objects.all()
 	
 	m = folium.Map(location=[23.97565,120.9738819], zoom_start=8, height="100%", position="initial")
+	marker_cluster = MarkerCluster(control=False).add_to(m)
 	style_attraction = {'color': 'red'}
 	style_restaurant = {'color': 'green', 'icon':'utensils', 'prefix':'fa'}
 	style_accomodation = {'color': 'blue', 'icon':'bed', 'prefix':'fa'}
+	
+	mCluster = MarkerCluster(name="Markers Demo").add_to(m)
 
 	for post in posts:
 		#popup = '<h1>' + post.title + '</h1>'
-		popup = '<div class="popup"><a href="/post/'+ str(post.pk) +'" target="_parent" style="text-decoration: none;"><h1>' + post.title + '</h1>'\
+		#stars
+		stars = '<span style="' + 'color:#ffbb04">'
+		for i in range(1,6):
+			if i <= post.stars:
+				stars = stars + '★'
+			else:
+				stars = stars + '☆'
+		stars = stars + '</span>'
+
+		popup = '<div class="popup"><a href="/post/'+ str(post.pk) +'" target="_parent" style="text-decoration: none; color:#000"><h1>' + post.title + '</h1>'\
 			+ '<h4>'+ post.location +'</h4>'\
-			+ '<h4>想去指數: '+ str(post.stars)+'</h4>'
+			+ '<h4>想去指數: '+ stars +'</h4>'
 		if post.imgur_url:
-			print("YES")
 			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a>'
 		else:
 			popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;"></a></div>'
@@ -44,11 +56,12 @@ def home(request):
 				icon = 'cutlery'
 		
 		m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=folium.Icon(icon=icon, color=color, prefix='fa')) # 使用Font Awesome Icons
-		m2.add_to(m)
+		m2.add_to(mCluster)
+	
 	folium.LayerControl().add_to(m)
 
 	m=m._repr_html_()
-	context = {'my_map': m}
+	context = {'my_map': m, 'range': range(5,0,-1)}
 	return render(request, 'home.html', context
 		)
 
@@ -96,7 +109,7 @@ def area(request):
 			art_comment.append([])
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
-	return render(request, 'area.html', {'post_list': post_list,'area_title':area_title, 'user':user,})
+	return render(request, 'area.html', {'post_list': post_list,'area_title':area_title, 'user':user, 'range': range(5,0,-1)})
 
 def attraction(request):
 	post = Post.objects.filter(category=1).order_by('-created_date')
@@ -112,6 +125,7 @@ def attraction(request):
 	return render(request, 'attraction.html', {
 		'post_list': post_list,
 		'user':user,
+		'range': range(5,0,-1)
 		})
 
 def accomodation(request):
@@ -128,6 +142,7 @@ def accomodation(request):
 	return render(request, 'accomodation.html', {
 		'post_list': post_list,
 		'user':user,
+		'range': range(5,0,-1)
 		})
 
 
@@ -145,11 +160,12 @@ def restaurant(request):
 	return render(request, 'restaurant.html', {
 		'post_list': post_list,
 		'user':user,
+		'range': range(5,0,-1)
 		})
 
 def post_detail(request, pk):
 	post = Post.objects.get(pk=pk)
-	return render(request, 'post.html', {'post':post})
+	return render(request, 'post.html', {'post':post, 'range': range(1,6)})
 
 def post_new(request):
 	if request.method == "POST":

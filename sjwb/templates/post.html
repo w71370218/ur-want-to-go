@@ -16,6 +16,18 @@
 		<span><a href="#" class="badge badge-secondary">{{ post.tag.name }}</a></span>
 		<h2 class="title">{{ post.title }}</h2>
         <p><span class="glyphicon">&#xe023;</span> {{ post.created_date }}</p>
+        <p style="font-size:medium;">
+            想去指數: 
+            <span style="color:#ffbb04">
+                {% for i in range %}
+                    {% if i  <=  post.stars %}
+                        ★
+                    {% else %}
+                        ☆
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </p>
         <div >
             <p>{{ post.text|linebreaks }}</p>
         </div>
