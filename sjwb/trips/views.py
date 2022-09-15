@@ -19,6 +19,8 @@ im = pyimgur.Imgur(CLIENT_ID)
 import requests
 import geopandas
 
+
+import os
 # webparser
 """
 map_url =  'https://data.moi.gov.tw/MoiOD'
@@ -27,20 +29,22 @@ response = requests.get(map_url + href)
 with open('County.zip', 'wb') as file:
 	file.write(response.content)
 	file.close()
-"""
-import os
 
+dir = os.getcwd()
+counties_gdf = geopandas.read_file(dir+ '\\media\\'+'County.zip')
+counties_gdf.to_file("County.geojson", driver='GeoJSON')
+"""
 
 def home(request):
 	posts = Post.objects.all()
-	
-	dir = os.getcwd()
-	counties_gdf = geopandas.read_file(dir+ '\\media\\'+'County.zip')
+
 	#map
 	m = folium.Map(location=[23.97565,120.9738819], zoom_start=8, height="100%", position="initial")
-
+	
 	# County layer
-	folium.GeoJson(data=counties_gdf["geometry"], name="縣市分區").add_to(m)
+	map_dir = os.path.join(os.getcwd(),'media','map')
+	f = open(os.path.join(map_dir,'County.geojson'), encoding='utf-8').read()
+	folium.GeoJson(f,name='縣市分區').add_to(m)
 
 	marker_cluster = MarkerCluster(control=False).add_to(m)
 	style_attraction = {'color': 'red'}
