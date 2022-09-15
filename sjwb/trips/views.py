@@ -121,9 +121,8 @@ def home(request):
 		
 		if post.tags.all():
 			for tag in post.tags.all():
-				if tag.img:
-					prefix = ''
-					icon = folium.features.CustomIcon(tag.img.path,icon_size=(40, 40))
+				if tag.imgur_url:
+					icon = folium.features.CustomIcon(tag.imgur_url,icon_size=(40, 40))
 					m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=icon, color=color)
 					icon_config = True
 					break;
