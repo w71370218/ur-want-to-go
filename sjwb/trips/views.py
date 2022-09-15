@@ -16,13 +16,11 @@ import pyimgur
 CLIENT_ID = settings.CLIENT_ID
 im = pyimgur.Imgur(CLIENT_ID)
 
+"""
+# webparser
 import requests
 import geopandas
 
-
-import os
-# webparser
-"""
 map_url =  'https://data.moi.gov.tw/MoiOD'
 href="/System/DownloadFile.aspx?DATA=72874C55-884D-4CEA-B7D6-F60B0BE85AB0"
 response = requests.get(map_url + href)
@@ -35,6 +33,23 @@ counties_gdf = geopandas.read_file(dir+ '\\media\\'+'County.zip')
 counties_gdf.to_file("County.geojson", driver='GeoJSON')
 """
 
+import os
+import json
+
+currDir = os.path.dirname(__file__)
+mediaDir = os.path.join(os.path.split(currDir)[0], "media")
+map_dir = os.path.join(mediaDir ,'map')
+
+county_map_file = open(os.path.join(map_dir,'County.geojson'), encoding='utf-8').read()
+
+county_map_json = json.loads(county_map_file)
+county_features = county_map_json["features"]
+"""
+for e in county_map_json["features"][0]["properties"]["COUNTYNAME"]:
+	print(e)
+"""
+
+
 def home(request):
 	posts = Post.objects.all()
 
@@ -42,14 +57,11 @@ def home(request):
 	m = folium.Map(location=[23.97565,120.9738819], zoom_start=8, height="100%", position="initial")
 	
 	# County layer
-	currDir = os.path.dirname(__file__)
-	mediaDir = os.path.join(os.path.split(currDir)[0], "media")
-	map_dir = os.path.join(mediaDir ,'map')
+	style_county = {'color': 'rgba(41, 152, 202, 0.5)', 'line_opacity': 0.2 }
+	for geo in county_features:
+		county = folium.GeoJson(geo, name='縣市分區', style_function=lambda x:style_county, tooltip=geo["properties"]["COUNTYNAME"] ).add_to(m)
 	
-	f = open(os.path.join(map_dir,'County.geojson'), encoding='utf-8').read()
-	folium.GeoJson(f,name='縣市分區').add_to(m)
 
-	marker_cluster = MarkerCluster(control=False).add_to(m)
 	style_attraction = {'color': 'red'}
 	style_restaurant = {'color': 'green', 'icon':'utensils', 'prefix':'fa'}
 	style_accomodation = {'color': 'blue', 'icon':'bed', 'prefix':'fa'}
