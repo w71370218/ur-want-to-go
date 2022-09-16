@@ -33,8 +33,8 @@
                                 </div>
                                 <div class="post-body">
                                         <div class="tag-group">
-                                                {% if post.tags != None  %}
-                                                        {% for tag in post.tags.all %}
+                                                {% if post.taglist != None  %}
+                                                        {% for tag in post.taglist %}
                                                                 <span><a href="#" class="badge badge-secondary" style="background-color: {{ tag.color }};">{{ tag.name }}</a></span>
                                                         {% endfor %}
                                                 {% endif %}

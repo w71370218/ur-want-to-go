@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 #建立首頁
-from trips.models import Post, Tag, Comment
+from trips.models import Post, Tag, Comment , Tag_post
 from .forms import PostForm, post_comment_form
 from django.utils import timezone
 from django.contrib.auth.forms import UserCreationForm
@@ -93,6 +93,20 @@ def home(request):
 
 	for post in posts:
 		#popup = '<h1>' + post.title + '</h1>'
+		#tag
+		
+		tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
+		tags_elements = ''
+		for tp in tag_post:
+			tag = Tag.objects.get(name=tp.tag)
+			tags_element = f'''
+				<span><a href="#" class="badge badge-secondary" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>
+			'''
+			tags_elements = tags_elements + tags_element
+		tag_group = f'''
+			<div class="tag-group">{ tags_elements }</div>
+		'''
+
 		#stars
 		stars = '<span style="' + 'color:#ffbb04">'
 		for i in range(1,6):
@@ -103,7 +117,7 @@ def home(request):
 		stars = stars + '</span>'
 
 		popup = '<div class="popup"><a href="/post/'+ str(post.pk) +'" target="_parent" style="text-decoration: none; color:#000"><h1>' + post.title + '</h1>'\
-			+ '<h4>'+ post.location +'</h4>'\
+			+ tag_group + '<h4>'+ post.location +'</h4>'\
 			+ '<h4>想去指數: '+ stars +'</h4>'
 		if post.imgur_url:
 			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a>'
@@ -122,7 +136,7 @@ def home(request):
 		if post.tags.all():
 			for tag in post.tags.all():
 				if tag.imgur_url:
-					icon = folium.features.CustomIcon(tag.imgur_url,icon_size=(60, 60))
+					icon = folium.features.CustomIcon(tag.imgur_url,icon_size=(80, 80))
 					m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=icon, color=color)
 					icon_config = True
 					break;
@@ -174,16 +188,25 @@ def attraction(request):
 	user = request.user
 	art_comment = []
 	for po in post:
+		#comment
 		if po.comment_set.all():
 			art_comment.append(po.comment_set.all())
 		else:
 			art_comment.append([])
+		
+		#tag
+		tag_post = Tag_post.objects.filter(post=po.id).order_by("order")
+		ordered_tag = []
+		for tp in tag_post:
+			ordered_tag.append(Tag.objects.get(name=tp.tag))
+		po.taglist = ordered_tag
+
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
 	return render(request, 'attraction.html', {
 		'post_list': post_list,
 		'user':user,
-		'range': range(5,0,-1)
+		'range': range(1,6)
 		})
 
 def accomodation(request):
@@ -195,12 +218,18 @@ def accomodation(request):
 			art_comment.append(po.comment_set.all())
 		else:
 			art_comment.append([])
+		#tag
+		tag_post = Tag_post.objects.filter(post=po.id).order_by("order")
+		ordered_tag = []
+		for tp in tag_post:
+			ordered_tag.append(Tag.objects.get(name=tp.tag))
+		po.taglist = ordered_tag
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
 	return render(request, 'accomodation.html', {
 		'post_list': post_list,
 		'user':user,
-		'range': range(5,0,-1)
+		'range': range(1,6)
 		})
 
 
@@ -213,16 +242,28 @@ def restaurant(request):
 			art_comment.append(po.comment_set.all())
 		else:
 			art_comment.append([])
+		#tag
+		tag_post = Tag_post.objects.filter(post=po.id).order_by("order")
+		ordered_tag = []
+		for tp in tag_post:
+			ordered_tag.append(Tag.objects.get(name=tp.tag))
+		po.taglist = ordered_tag
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
 	return render(request, 'restaurant.html', {
 		'post_list': post_list,
 		'user':user,
-		'range': range(5,0,-1)
+		'range': range(1,6)
 		})
 
 def post_detail(request, pk):
 	post = Post.objects.get(pk=pk)
+	#tag
+	tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
+	ordered_tag = []
+	for tp in tag_post:
+		ordered_tag.append(Tag.objects.get(name=tp.tag))
+	post.taglist = ordered_tag
 	return render(request, 'post.html', {'post':post, 'range': range(1,6)})
 
 def post_new(request):
