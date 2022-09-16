@@ -4,7 +4,7 @@ from .models import Post, Comment
 class PostForm(forms.ModelForm):
 	class Meta:
 		model = Post
-		fields = ('photo','category', 'area', 'title', 'text', 'location', 'phone_number', 'tags', 'stars', 'lat','lng')
+		fields = ('photo','category', 'area', 'title', 'text', 'location', 'phone_number', 'tags', 'stars', 'lat','lng','visited',)
 		labels = {
             'photo': '圖片',
             'title': '標題',
@@ -17,6 +17,7 @@ class PostForm(forms.ModelForm):
             'stars':'想去指數',
             'lat':'緯度',
             'lng':'經度',
+            'visited':'已造訪',
         }
 
 class post_comment_form(forms.ModelForm):

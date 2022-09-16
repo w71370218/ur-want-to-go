@@ -1,3 +1,5 @@
+from email.policy import default
+from pyexpat import model
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -8,7 +10,6 @@ class Tag(models.Model):
 	name = models.CharField(max_length=10)
 	color = models.CharField(max_length=7, default='#ff0000')
 	icon = models.CharField(max_length=100,null=True, blank=True)
-	img = models.ImageField(upload_to='icon/',blank=True, null=True)
 	imgur_url = models.URLField(blank=True, null=True)
 	# 讓它改成顯示名稱
 	def __str__(self):
@@ -48,7 +49,7 @@ class Post(models.Model):
 	
 	location = models.CharField(max_length=100, help_text='<font color="red">*必填</font>')
 	phone_number = models.CharField(max_length=12,blank=True, null=True, help_text='類型是住宿或餐廳才要填')
-	tags = models.ManyToManyField(Tag,default=None,blank=True)
+	tags = models.ManyToManyField(Tag, through='Tag_post', default=None,blank=True)
 	photo = models.ImageField(upload_to='img/',blank=True, null=True)
 	imgur_url = models.URLField(blank=True, null=True)
 	created_date = models.DateTimeField(default=timezone.now)
@@ -57,6 +58,7 @@ class Post(models.Model):
 	stars = models.IntegerField(max_length=1, default=1, help_text='<font color="red">*必填</font>',validators=[MaxValueValidator(5)])
 	lat  = models.FloatField(default=1, help_text='<font color="red">*必填</font>')
 	lng = models.FloatField(default=1, help_text='<font color="red">*必填</font>')
+	visited = models.BooleanField(default=False, help_text='<font color="red">*必填</font>')
 
 	def publish(self):
 		self.published_date = timezone.now()
@@ -83,6 +85,19 @@ photo			照片
 created_date
 published_date
 '''
+
+class Tag_post(models.Model):
+	tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+	post = models.ForeignKey(Post, on_delete=models.CASCADE)
+	order = models.IntegerField(default=1)
+
+	def __str__(self):
+		return f'{self.post}_{self.order}_{self.tag}'
+	
+	class Meta:
+		unique_together = [['post', 'tag']]
+		ordering = ('-post','order',)
+	
 
 class Comment(models.Model):
 	comment_post = models.ForeignKey('post', on_delete=models.CASCADE)

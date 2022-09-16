@@ -40,6 +40,18 @@
                                                 {% endif %}
                                         </div>
                                         <p class="title" href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</p>
+                                        <p>
+                                                想去指數: 
+                                                <span style="color:#ffbb04">
+                                                    {% for i in range %}
+                                                        {% if i  <=  post.stars %}
+                                                            ★
+                                                        {% else %}
+                                                            ☆
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </span>
+                                            </p>
                                         <p class="post-text">{{ post.text }}</p>
                                         <div>
                                             <p><span class="glyphicon">&#xe062;</span> {{ post.location }}</p>

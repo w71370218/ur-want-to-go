@@ -89,7 +89,7 @@ def home(request):
 	style_restaurant = {'color': 'green', 'icon':'utensils', 'prefix':'fa'}
 	style_accomodation = {'color': 'blue', 'icon':'bed', 'prefix':'fa'}
 	
-	mCluster = MarkerCluster(name="景點數量").add_to(m)
+	mCluster = MarkerCluster(name="所有景點").add_to(m)
 
 	for post in posts:
 		#popup = '<h1>' + post.title + '</h1>'
@@ -122,7 +122,7 @@ def home(request):
 		if post.tags.all():
 			for tag in post.tags.all():
 				if tag.imgur_url:
-					icon = folium.features.CustomIcon(tag.imgur_url,icon_size=(40, 40))
+					icon = folium.features.CustomIcon(tag.imgur_url,icon_size=(60, 60))
 					m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=icon, color=color)
 					icon_config = True
 					break;
@@ -155,7 +155,7 @@ def area(request):
 		elif s.isdigit() and d == True:
 			area_ID+=str(s)
 		count+=1
-	post = Post.objects.filter(area=area_ID).order_by('-created_date')
+	post = Post.objects.filter(area=area_ID).order_by('-stars', '-created_date')
 
 	area_title = AREA_CHOICES[int(area_ID)-1][1]
 	user = request.user
@@ -170,7 +170,7 @@ def area(request):
 	return render(request, 'area.html', {'post_list': post_list,'area_title':area_title, 'user':user, 'range': range(5,0,-1)})
 
 def attraction(request):
-	post = Post.objects.filter(category=1).order_by('-created_date')
+	post = Post.objects.filter(category=1).order_by('-stars', '-created_date')
 	user = request.user
 	art_comment = []
 	for po in post:
@@ -187,7 +187,7 @@ def attraction(request):
 		})
 
 def accomodation(request):
-	post = Post.objects.filter(category=2).order_by('-created_date')
+	post = Post.objects.filter(category=2).order_by('-stars', '-created_date')
 	user = request.user
 	art_comment = []
 	for po in post:
@@ -205,7 +205,7 @@ def accomodation(request):
 
 
 def restaurant(request):
-	post = Post.objects.filter(category=3).order_by('-created_date')
+	post = Post.objects.filter(category=3).order_by('-stars', '-created_date')
 	user = request.user
 	art_comment = []
 	for po in post:
