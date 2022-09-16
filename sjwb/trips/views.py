@@ -98,7 +98,7 @@ def home(request):
 		tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
 		tags_elements = ''
 		for tp in tag_post:
-			tag = Tag.objects.get(name=tp.tag)
+			tag = Tag.objects.get(id=tp.tag.id)
 			tags_element = f'''
 				<span><a href="#" class="badge badge-secondary" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>
 			'''
@@ -198,7 +198,7 @@ def attraction(request):
 		tag_post = Tag_post.objects.filter(post=po.id).order_by("order")
 		ordered_tag = []
 		for tp in tag_post:
-			ordered_tag.append(Tag.objects.get(name=tp.tag))
+			ordered_tag.append(Tag.objects.get(id=tp.tag.id))
 		po.taglist = ordered_tag
 
 	post_list = zip(post, art_comment)
@@ -222,7 +222,7 @@ def accomodation(request):
 		tag_post = Tag_post.objects.filter(post=po.id).order_by("order")
 		ordered_tag = []
 		for tp in tag_post:
-			ordered_tag.append(Tag.objects.get(name=tp.tag))
+			ordered_tag.append(Tag.objects.get(id=tp.tag.id))
 		po.taglist = ordered_tag
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
@@ -246,7 +246,7 @@ def restaurant(request):
 		tag_post = Tag_post.objects.filter(post=po.id).order_by("order")
 		ordered_tag = []
 		for tp in tag_post:
-			ordered_tag.append(Tag.objects.get(name=tp.tag))
+			ordered_tag.append(Tag.objects.get(id=tp.tag.id))
 		po.taglist = ordered_tag
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
@@ -262,7 +262,7 @@ def post_detail(request, pk):
 	tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
 	ordered_tag = []
 	for tp in tag_post:
-		ordered_tag.append(Tag.objects.get(name=tp.tag))
+		ordered_tag.append(Tag.objects.get(id=tp.tag.id))
 	post.taglist = ordered_tag
 	return render(request, 'post.html', {'post':post, 'range': range(1,6)})
 
