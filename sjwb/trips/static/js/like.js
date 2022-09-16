@@ -20,7 +20,7 @@ $('.like-form').submit(function(event){
         success: function() {
             $.ajax({
                 type: 'GET',
-                url: 'http://127.0.0.1:8000/serialized/',
+                url: window.location.origin + '/serialized/',
                 success: function(response){
                     $.each(response, function(index, element){
                         if (post_id == element.id){

@@ -380,3 +380,6 @@ def post_new_comment(request, post_id):
 			return redirect('/attraction')
 		else:
 			return redirect('/attraction')
+
+def post_filter(request):
+	print(request)
