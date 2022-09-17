@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
 {% block title %}
-	<title>餐廳 | 想玩的地點</title>
+	<title>標籤：{{ tag_name }} | 想玩的地點</title>
 {% endblock %}
 
 {% block content %}
 	{% if request.user.is_authenticated %}
 		<p>Welcome, {{ user.username }}</p>
 	{% endif %}
-	<h2>餐廳 restaurant</h2>
+	<h2>標籤：{{ tag_name }}</h2>
+    <p>總共有 {{ post_count }} 筆資料</p>
     {% if messages %}
     <ul class="massages">
         {% for message in messages %}

@@ -97,10 +97,12 @@ def home(request):
 		
 		tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
 		tags_elements = ''
+		tag_list = []
 		for tp in tag_post:
 			tag = Tag.objects.get(id=tp.tag.id)
+			tag_list.append(tag)
 			tags_element = f'''
-				<span><a href="#" class="badge badge-secondary" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>
+				<span><a href="/tag/{ tag.pk }" class="badge badge-secondary" target="_parent" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>
 			'''
 			tags_elements = tags_elements + tags_element
 		tag_group = f'''
@@ -133,8 +135,8 @@ def home(request):
 				color = 'green'
 		icon_config = False
 		
-		if post.tags.all():
-			for tag in post.tags.all():
+		if tag_list:
+			for tag in tag_list:
 				if tag.imgur_url:
 					icon = folium.features.CustomIcon(tag.imgur_url,icon_size=(80, 80))
 					m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=icon, color=color)
@@ -157,6 +159,29 @@ def home(request):
 	context = {'my_map': m, 'range': range(5,0,-1)}
 	return render(request, 'home.html', context
 		)
+
+def tag(request, pk):
+	tag_name = Tag.objects.get(pk=pk)
+	post = Post.objects.filter(tags=pk)
+	art_comment = []
+	for po in post:
+		#comment
+		if po.comment_set.all():
+			art_comment.append(po.comment_set.all())
+		else:
+			art_comment.append([])
+		
+		#tag
+		tag_post = Tag_post.objects.filter(post=po.id).order_by("order")
+		ordered_tag = []
+		for tp in tag_post:
+			ordered_tag.append(Tag.objects.get(id=tp.tag.id))
+		po.taglist = ordered_tag
+	
+	post_list = zip(post, art_comment)
+	post_count = post.count()
+	comment_form = post_comment_form()
+	return render(request, 'tag.html', {'post_count':post_count,'tag_name':tag_name, 'post_list':post_list, 'range': range(1,6)})
 
 def area(request):
 	url = request.build_absolute_uri()
@@ -382,4 +407,9 @@ def post_new_comment(request, post_id):
 			return redirect('/attraction')
 
 def post_filter(request):
-	print(request)
+	##未完成
+	if request.method == 'GET':
+		print(request.headers)
+		print(request.GET)
+		print(request.GET.get('select_s'))
+		return render()

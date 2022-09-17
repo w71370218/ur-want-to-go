@@ -16,14 +16,12 @@
         {% endfor %}
     </ul>
     {% endif %}
-    <form action="" id="" method="GET" class="filter-form">
         排序依據
-        <select name="filter" id="filter">
-                <option value="-stars" selected>最想去</option>
+        <select name="filter" id="filter-s" onchange="check()" action="{% url 'post_filter' %}">
+                <option value="-stars">最想去</option>
                 <option value="-date" >最新發布 </option>
                 <option value="date" >最早發布 </option>
         </select>
-    </form>
     <div class="container">
         <div class="row">
             {% for post,comment in post_list %}
@@ -43,7 +41,7 @@
                                         <div class="tag-group">
                                                 {% if post.taglist != None  %}
                                                         {% for tag in post.taglist %}
-                                                                <span><a href="#" class="badge badge-secondary" style="background-color: {{ tag.color }};">{{ tag.name }}</a></span>
+                                                                <span><a href="{% url 'tag' pk=tag.pk %}" class="badge badge-secondary" style="background-color: {{ tag.color }};">{{ tag.name }}</a></span>
                                                         {% endfor %}
                                                 {% endif %}
                                         </div>

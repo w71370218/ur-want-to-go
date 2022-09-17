@@ -35,7 +35,7 @@
                                         <div class="tag-group">
                                                 {% if post.taglist != None  %}
                                                         {% for tag in post.taglist %}
-                                                                <span><a href="#" class="badge badge-secondary" style="background-color: {{ tag.color }};">{{ tag.name }}</a></span>
+                                                                <span><a href="{% url 'tag' pk=tag.pk %}" class="badge badge-secondary" style="background-color: {{ tag.color }};">{{ tag.name }}</a></span>
                                                         {% endfor %}
                                                 {% endif %}
                                         </div>
