@@ -5,25 +5,28 @@
 {% endblock %}
 
 {% block content %}
-	{% if request.user.is_authenticated %}
-		<p>Welcome, {{ user.username }}</p>
-	{% endif %}
-	<h2>景點 attraction</h2>
-    {% if messages %}
-    <ul class="massages">
-        {% for message in messages %}
-        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-        排序依據
-        <select name="filter" id="filter-s" onchange="check()" action="{% url 'post_filter' %}">
-                <option value="-stars">最想去</option>
-                <option value="-date" >最新發布 </option>
-                <option value="date" >最早發布 </option>
-        </select>
+	
     <div class="container">
         <div class="row">
+                <div class="context">
+                {% if request.user.is_authenticated %}
+                                <p>Welcome, {{ user.username }}</p>
+                        {% endif %}
+                        <h2>景點 attraction</h2>
+                {% if messages %}
+                <ul class="massages">
+                        {% for message in messages %}
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                </ul>
+                {% endif %}
+                        排序依據
+                        <select name="filter" id="filter-s" onchange="check()" action="{% url 'post_filter' %}">
+                                <option value="-stars">最想去</option>
+                                <option value="-date" >最新發布 </option>
+                                <option value="date" >最早發布 </option>
+                        </select>
+                </div>
             {% for post,comment in post_list %}
                 <div class="col-md-4">
                 <a href="{% url 'post_detail' pk=post.pk %}" style="text-decoration:none; color: inherit;">

@@ -5,7 +5,10 @@
 {% endblock %}
 
 {% block content %}
-	{% if request.user.is_authenticated %}
+    <div class="container">
+        <div class="row">
+                <div class="context">
+                {% if request.user.is_authenticated %}
 		<p>Welcome, {{ user.username }}</p>
 	{% endif %}
 	<h2>住宿 accomodation</h2>
@@ -16,8 +19,7 @@
         {% endfor %}
     </ul>
     {% endif %}
-    <div class="container">
-        <div class="row">
+</div>
             {% for post,comment in post_list %}
                 <div class="col-md-4">
                 <a href="{% url 'post_detail' pk=post.pk %}" style="text-decoration:none; color: inherit;">

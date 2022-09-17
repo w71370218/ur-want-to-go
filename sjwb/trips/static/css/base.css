@@ -188,6 +188,12 @@ img {
 		font-size: 50px;
 	}
 	
+	.context {
+		font-size: 60px;
+	}
+	div.context>h2 {
+		font-size: 60px;
+	}
 	.title {
 		font-size: 150%;
 		overflow: hidden;
@@ -209,6 +215,8 @@ img {
 	}
 	.container {
 		width:100%;
+		position: fixed;
+		top: 150px;
 	}
 	.row {
 		width:100%;
