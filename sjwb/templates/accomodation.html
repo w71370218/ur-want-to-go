@@ -57,8 +57,12 @@
                                             </p>
                                         <p class="post-text">{{ post.text }}</p>
                                         <div>
-                                            <p><span class="glyphicon">&#xe062;</span> {{ post.location }}</p>
-                                            <p><span class="glyphicon">&#xe183;</span> {{ post.phone_number }}</p>
+                                                <div class="post-location">
+                                                        <p><span class="glyphicon">&#xe062;</span> {{ post.location }}</p>
+                                                            </div>
+                                                            <div class="post-location">
+                                                        <p><span class="glyphicon">&#xe183;</span> {% if post.phone_number != None %} {{ post.phone_number }}{% endif %}</p>
+                                                            </div>
                                             <span class="glyphicon">&#xe005;</span>
                                             <span class="text-muted likes-total{{ post.id }}">{{ post.liked.all.count }}</span>
                                         </div>
