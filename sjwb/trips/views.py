@@ -308,7 +308,7 @@ def post_detail(request, pk):
 	post.taglist = ordered_tag
 
 	# folium map
-	m = folium.Map(location=[post.lat,post.lng], zoom_start=12, height=400)
+	m = folium.Map(location=[post.lat,post.lng], zoom_start=20, height=600)
 	tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
 
 	#stars
