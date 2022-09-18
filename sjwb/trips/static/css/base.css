@@ -2,6 +2,7 @@ html {
 	width: 100%;
 	margin: 0;
 	padding: 0;
+	font-size: 100%
 }
 
 a {
@@ -312,5 +313,13 @@ footer {
 
 	.post-detail {
 		font-size: 50px;
+	}
+
+	.post-innertext>h1,
+	.post-innertext>h2,
+	.post-innertext>h3,
+	.post-innertext>h4,
+	.post-innertext>h5 {
+		font-size: 100%;
 	}
 }
