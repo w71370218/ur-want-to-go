@@ -73,7 +73,7 @@ AREA_CHOICES=((1,'基隆市'),
 	(22, '連江縣'),)
 
 def home(request):
-	posts = Post.objects.all()
+	posts = Post.objects.filter(permanently_closed=False)
 
 	#map
 	m = folium.Map(location=[23.97565,120.9738819], zoom_start=8, height="100%", position="initial")
@@ -162,7 +162,8 @@ def home(request):
 
 def tag(request, pk):
 	tag_name = Tag.objects.get(pk=pk)
-	post = Post.objects.filter(tags=pk)
+	post = Post.objects.filter(tags=pk, permanently_closed=False)
+
 	art_comment = []
 	for po in post:
 		#comment
@@ -194,7 +195,7 @@ def area(request):
 		elif s.isdigit() and d == True:
 			area_ID+=str(s)
 		count+=1
-	post = Post.objects.filter(area=area_ID).order_by('-stars', '-created_date')
+	post = Post.objects.filter(area=area_ID,permanently_closed=False).order_by('-stars', '-created_date')
 
 	area_title = AREA_CHOICES[int(area_ID)-1][1]
 	user = request.user
@@ -204,12 +205,13 @@ def area(request):
 			art_comment.append(po.comment_set.all())
 		else:
 			art_comment.append([])
+	post_count = post.count()
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
-	return render(request, 'area.html', {'post_list': post_list,'area_title':area_title, 'user':user, 'range': range(5,0,-1)})
+	return render(request, 'area.html', {'post_count':post_count,'post_list': post_list,'area_title':area_title, 'user':user, 'range': range(5,0,-1)})
 
 def attraction(request):
-	post = Post.objects.filter(category=1).order_by('-stars', '-created_date')
+	post = Post.objects.filter(category=1,permanently_closed=False).order_by('-stars', '-created_date')
 	user = request.user
 	art_comment = []
 	for po in post:
@@ -226,16 +228,18 @@ def attraction(request):
 			ordered_tag.append(Tag.objects.get(id=tp.tag.id))
 		po.taglist = ordered_tag
 
+	post_count = post.count()
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
 	return render(request, 'attraction.html', {
+		'post_count':post_count,
 		'post_list': post_list,
 		'user':user,
 		'range': range(1,6)
 		})
 
 def accomodation(request):
-	post = Post.objects.filter(category=2).order_by('-stars', '-created_date')
+	post = Post.objects.filter(category=2,permanently_closed=False).order_by('-stars', '-created_date')
 	user = request.user
 	art_comment = []
 	for po in post:
@@ -249,9 +253,11 @@ def accomodation(request):
 		for tp in tag_post:
 			ordered_tag.append(Tag.objects.get(id=tp.tag.id))
 		po.taglist = ordered_tag
+	post_count = post.count()
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
 	return render(request, 'accomodation.html', {
+		'post_count':post_count,
 		'post_list': post_list,
 		'user':user,
 		'range': range(1,6)
@@ -259,7 +265,7 @@ def accomodation(request):
 
 
 def restaurant(request):
-	post = Post.objects.filter(category=3).order_by('-stars', '-created_date')
+	post = Post.objects.filter(category=3,permanently_closed=False).order_by('-stars', '-created_date')
 	user = request.user
 	art_comment = []
 	for po in post:
@@ -273,9 +279,11 @@ def restaurant(request):
 		for tp in tag_post:
 			ordered_tag.append(Tag.objects.get(id=tp.tag.id))
 		po.taglist = ordered_tag
+	post_count = post.count()
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
 	return render(request, 'restaurant.html', {
+		'post_count':post_count,
 		'post_list': post_list,
 		'user':user,
 		'range': range(1,6)
@@ -286,10 +294,71 @@ def post_detail(request, pk):
 	#tag
 	tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
 	ordered_tag = []
+	tags_elements = ''
 	for tp in tag_post:
-		ordered_tag.append(Tag.objects.get(id=tp.tag.id))
+		tag = Tag.objects.get(id=tp.tag.id)
+		ordered_tag.append(tag)
+		tags_element = f'''
+				<span><a href="/tag/{ tag.pk }" class="badge badge-secondary" target="_parent" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>
+			'''
+		tags_elements = tags_elements + tags_element
+	tag_group = f'''
+			<div class="tag-group">{ tags_elements }</div>
+		'''
 	post.taglist = ordered_tag
-	return render(request, 'post.html', {'post':post, 'range': range(1,6)})
+
+	# folium map
+	m = folium.Map(location=[post.lat,post.lng], zoom_start=12, height=400)
+	tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
+
+	#stars
+	stars = '<span style="' + 'color:#ffbb04">'
+	for i in range(1,6):
+		if i <= post.stars:
+			stars = stars + '★'
+		else:
+			stars = stars + '☆'
+	stars = stars + '</span>'
+	popup = '<div class="popup"><a href="/post/'+ str(post.pk) +'" target="_parent" style="text-decoration: none; color:#000"><h1>' + post.title + '</h1>'\
+		+ tag_group + '<h4>'+ post.location +'</h4>'\
+		+ '<h4>想去指數: '+ stars +'</h4>'
+	if post.imgur_url:
+		popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a>'
+	else:
+		popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;"></a></div>'
+
+	match post.category:
+		case 1:
+			color = 'red'
+		case 2:
+			color = 'blue'
+		case 3:
+			color = 'green'
+	icon_config = False
+		
+	if ordered_tag:
+		for tag in ordered_tag:
+			if tag.imgur_url:
+				icon = folium.features.CustomIcon(tag.imgur_url,icon_size=(80, 80))
+				m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=icon, color=color)
+				icon_config = True
+				break;
+	if not icon_config:
+		match post.category:
+			case 1:
+				icon = ''
+			case 2:
+				icon = 'bed'
+			case 3:
+				icon = 'cutlery'
+		m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=folium.Icon(icon=icon, color=color,prefix ='fa'))
+	
+	m2.add_to(m)
+	folium.LayerControl().add_to(m)
+
+	m=m._repr_html_()
+
+	return render(request, 'post.html', {'my_map':m,'post':post, 'range': range(1,6)})
 
 def post_new(request):
 	if request.method == "POST":

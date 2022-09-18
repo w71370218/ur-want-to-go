@@ -13,6 +13,7 @@
                         <p>Welcome, {{ user.username }}</p>
                 {% endif %}
                 <h2>餐廳 restaurant</h2>
+                <p>總共有 {{ post_count }} 筆資料</p>
                         {% if messages %}
                 <ul class="massages">
                         {% for message in messages %}
@@ -127,4 +128,9 @@
                         </div>
                 </div>
         {% endfor %}
+</div>
+</div>
+<footer>
+    <h1>資料已經到底了!</h1>
+</footer>
 {% endblock %}

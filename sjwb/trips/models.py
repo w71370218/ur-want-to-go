@@ -59,6 +59,7 @@ class Post(models.Model):
 	lat  = models.FloatField(default=1, help_text='<font color="red">*必填</font>')
 	lng = models.FloatField(default=1, help_text='<font color="red">*必填</font>')
 	visited = models.BooleanField(default=False, help_text='<font color="red">*必填</font>')
+	permanently_closed = models.BooleanField(default=False)
 
 	def publish(self):
 		self.published_date = timezone.now()
