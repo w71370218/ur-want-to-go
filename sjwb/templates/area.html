@@ -7,18 +7,20 @@
 {% block content %}
     <div class="container">
         <div class="row">
+                <div class="context">
                 {% if request.user.is_authenticated %}
-                        <p>Welcome, {{ user.username }}</p>
-                {% endif %}
-                <h2>{{ area_title }}</h2>
-                <p>總共有 {{ post_count }} 筆資料</p>
-        {% if messages %}
-        <ul class="massages">
-                {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-        </ul>
-        {% endif %}
+		<p>Welcome, {{ user.username }}</p>
+	{% endif %}
+	<h2>{{ area_title }}</h2>
+        <p>總共有 {{ post_count }} 筆資料</p>
+    {% if messages %}
+    <ul class="massages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
             {% for post,comment in post_list %}
                 <div class="col-md-4">
                 <a href="{% url 'post_detail' pk=post.pk %}" style="text-decoration:none; color: inherit;">
@@ -33,7 +35,13 @@
                                     {% endif %}
                                 </div>
                                 <div class="post-body">
-                                        <span><a href="#" class="badge badge-secondary">{{ post.tag.name }}</a></span>
+                                        <div class="tag-group">
+                                                {% if post.taglist != None  %}
+                                                        {% for tag in post.taglist %}
+                                                                <span><a href="{% url 'tag' pk=tag.pk %}" class="badge badge-secondary" style="background-color: {{ tag.color }};">{{ tag.name }}</a></span>
+                                                        {% endfor %}
+                                                {% endif %}
+                                        </div>
                                         <p class="title" href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</p>
                                         <p>
                                                 想去指數: 
@@ -75,7 +83,7 @@
                                                                 <form action="{% url 'like_post' %}" id="{{ post.id }}" method="POST" class="like-form">
                                                                         {% csrf_token %}
                                                                         <input type="hidden" name="post_pk" id="{{ post.id }}" value="{{ post.pk }}">
-                                                                        <button type="submit" class="btn btn-default btn-sm btn-outline-secondary like-btn{{ post.id }}" >
+                                                                        <button type="submit" class="btn btn-default btn-sm btn-outline-secondary like-btn{{ post.id }}">
                                                                         {% if user not in post.liked.all %}
                                                                                 &#x1F90D; Like
                                                                                 </button>
@@ -104,7 +112,6 @@
                                                         <input type="search" placeholder="歡迎留言" name="comment_content">
                                                         <button type="submit", class="btn btn-default btn-sm btn-outline-secondary">送出</button>
                                                 </form>
-                                                <!--
                                                 <div class="comment-body">
                                                     {% for co in comment %}
                                                 <div class="comment">
@@ -115,10 +122,9 @@
                                                 </div>
                                                 {% endfor %}
                                                 </div>
-                                                --->
                                         </div>
-                                </div></a>
-                        </div>
+                                </div>
+                        </div></a>
                 </div>
         {% endfor %}
 </div>

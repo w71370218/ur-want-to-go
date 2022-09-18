@@ -5,23 +5,22 @@
 {% endblock %}
 
 {% block content %}
-	
     <div class="container">
         <div class="row">
                 <div class="context">
                 {% if request.user.is_authenticated %}
-                        <p>Welcome, {{ user.username }}</p>
-                {% endif %}
-                <h2>標籤：{{ tag_name }}</h2>
+		<p>Welcome, {{ user.username }}</p>
+	{% endif %}
+	<h2>標籤：{{ tag_name }}</h2>
         <p>總共有 {{ post_count }} 筆資料</p>
-        {% if messages %}
-        <ul class="massages">
-                {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-        </ul>
-        {% endif %}
-        </div>
+    {% if messages %}
+    <ul class="massages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
             {% for post,comment in post_list %}
                 <div class="col-md-4">
                 <a href="{% url 'post_detail' pk=post.pk %}" style="text-decoration:none; color: inherit;">
@@ -124,8 +123,8 @@
                                                 {% endfor %}
                                                 </div>
                                         </div>
-                                </div></a>
-                        </div>
+                                </div>
+                        </div></a>
                 </div>
         {% endfor %}
 </div>

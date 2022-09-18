@@ -4,7 +4,7 @@ html {
 	padding: 0;
 }
 
-a{
+a {
 	text-decoration: none;
 }
 
@@ -20,10 +20,10 @@ a{
 
 .navbar {
 	list-style-type: none;
-    margin: 0;
-    padding: 1em;
+	margin: 0;
+	padding: 1em;
 	text-align: center;
-	
+
 	background-color: #343a40;
 	width: 100%;
 
@@ -31,16 +31,17 @@ a{
 }
 
 .navbar a {
-	color: rgba(255,255,255,.75);
+	color: rgba(255, 255, 255, .75);
 	display: flex;
 	align-content: center;
 }
 
-.navbar-brand{
+.navbar-brand {
 	padding-top: 0.5em;
 }
+
 .sidebar {
-	width:20%;
+	width: 20%;
 }
 
 .title {
@@ -52,6 +53,7 @@ a{
 	-webkit-box-orient: vertical;
 	white-space: normal;
 }
+
 .date {
 	font-size: 80%;
 	color: #5b6670;
@@ -69,29 +71,30 @@ a{
 	margin-bottom: 3rem;
 }
 
-.post-body{
-	padding:0 2rem 1rem;
+.post-body {
+	padding: 0 2rem 1rem;
 }
 
-.box-shadow { 
+.box-shadow {
 	width: 360px;
-	box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .25); 
+	box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .25);
 }
 
 .raphael-group-48-fc-gradient-legend {
-    display: none;
+	display: none;
 }
 
-div.img > img , div.post-img > img{
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
-    top: 0;
+div.img>img,
+div.post-img>img {
+	max-width: 100%;
+	max-height: 100%;
+	display: block;
+	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
-    margin: auto;
-    position: absolute;
+	margin: auto;
+	position: absolute;
 }
 
 img {
@@ -105,21 +108,21 @@ img {
 .img {
 	height: 225px;
 	width: 360px;
-    border:1px;
-    position: relative;
+	border: 1px;
+	position: relative;
 }
 
-.img .bg{
-	-webkit-filter:blur(3px) opacity(0.5);
+.img .bg {
+	-webkit-filter: blur(3px) opacity(0.5);
 	max-width: 100%;
-    max-height: 100%;
+	max-height: 100%;
 }
 
-.post-img{
+.post-img {
 	height: 50vh;
 	width: 100%;
-    border:1px;
-    position: relative;
+	border: 1px;
+	position: relative;
 }
 
 .post-detail {
@@ -153,11 +156,11 @@ img {
 	height: 96px;
 	line-height: 24px;
 	overflow: hidden;
-	display:inline-block;
+	display: inline-block;
 }
 
 .btn-group {
-	display: inline-flex; 
+	display: inline-flex;
 	height: 30px;
 }
 
@@ -172,13 +175,14 @@ footer {
 	text-align: center;
 }
 
-@media screen and (min-width:720px){ 
+@media screen and (min-width:720px) {
 	.navbar {
 		padding: 0.1em;
 		min-height: 50px;
 	}
-   }
-@media screen and (max-width:1080px){ 
+}
+
+@media screen and (max-width:1080px) {
 	.navbar {
 		min-height: 120px;
 		position: fixed;
@@ -189,16 +193,20 @@ footer {
 		font-size: 16px;
 		padding: 1em;
 	}
-	.navbar-brand, .navbar-nav>li>a {
+
+	.navbar-brand,
+	.navbar-nav>li>a {
 		font-size: 50px;
 	}
-	
+
 	.context {
 		font-size: 60px;
 	}
+
 	div.context>h2 {
 		font-size: 60px;
 	}
+
 	.title {
 		font-size: 150%;
 		overflow: hidden;
@@ -208,83 +216,100 @@ footer {
 		-webkit-box-orient: vertical;
 		white-space: normal;
 	}
-	
+
 	.col-md-4 {
-		width:100%;
+		width: 100%;
 		margin-right: 2rem;
 		margin-top: 2rem;
 	}
-	
+
 	.navbar-right {
-		float: none!important;
+		float: none !important;
 	}
+
 	.container {
-		width:100%;
-		position: fixed;
+		width: 100%;
 		top: 150px;
 	}
+
 	.row {
-		width:100%;
+		width: 100%;
 	}
-	
-	.post, .mb-4, .box-shadow {
-		width:100%;
+
+	.post,
+	.mb-4,
+	.box-shadow {
+		width: 100%;
 	}
+
 	.post-text {
-		max-width:100%;
+		max-width: 100%;
 	}
+
 	.img {
 		width: 100%;
-		height:50vh;
+		height: 50vh;
 	}
+
 	.badge {
 		font-size: 35px;
 		min-width: 75px;
 	}
+
 	.title {
 		font-size: 64px;
 		display: block;
 		max-width: 100%;
 	}
+
 	.post-text {
 		min-height: 8.5vh;
 		max-width: 100%;
 		font-size: 40px;
 	}
+
 	.post-location {
 		min-height: 50px;
 		max-width: 100%;
 	}
+
 	.post-body {
 		font-size: 35px;
 	}
+
 	.btn-group {
 		width: 100%;
 		display: flex;
 		align-items: baseline;
-		
-		
+
+
 	}
+
 	.btn-group button {
 		width: 100%;
 		min-height: 60px;
 		font-size: 40px;
 	}
+
 	form button {
 		min-height: 60px;
 		font-size: 40px;
 		min-width: 60px;
 	}
+
 	form {
 		display: flex;
 		align-content: space-around;
 	}
+
 	form input {
 		width: 100%;
 	}
+
 	.post-img {
 		width: 100%;
 	}
+
 	.post-detail {
 		font-size: 50px;
 	}

@@ -5,35 +5,28 @@
 {% endblock %}
 
 {% block content %}
-	
     <div class="container">
         <div class="row">
                 <div class="context">
                 {% if request.user.is_authenticated %}
-                                <p>Welcome, {{ user.username }}</p>
-                        {% endif %}
-                        <h2>景點 attraction</h2>
-                        <p>總共有 {{ post_count }} 筆資料</p>
-                {% if messages %}
-                <ul class="massages">
-                        {% for message in messages %}
-                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                </ul>
-                {% endif %}
-                        排序依據
-                        <select name="filter" id="filter-s" onchange="check()" action="{% url 'post_filter' %}">
-                                <option value="-stars">最想去</option>
-                                <option value="-date" >最新發布 </option>
-                                <option value="date" >最早發布 </option>
-                        </select>
-                </div>
+		<p>Welcome, {{ user.username }}</p>
+	{% endif %}
+	<h2>景點 attraction</h2>
+        <p>總共有 {{ post_count }} 筆資料</p>
+    {% if messages %}
+    <ul class="massages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
             {% for post,comment in post_list %}
                 <div class="col-md-4">
                 <a href="{% url 'post_detail' pk=post.pk %}" style="text-decoration:none; color: inherit;">
                         <div class="post mb-4 box-shadow">
                                 <div class="img">
-                                    {% if post.imgur_url is not null %}
+                                    {% if post.photo.url is not null %}
                                         <div class="img bg" style="background: url({{ post.imgur_url }});"></div>
                                         <img class="post-img-top" src="{{ post.imgur_url }}">
                                     {% else %}
@@ -64,8 +57,9 @@
                                             </p>
                                         <p class="post-text">{{ post.text }}</p>
                                         <div>
-                                            <p class="post-location"><span class="glyphicon">&#xe062;</span> {{ post.location }}</p>
-                                            <span class="glyphicon">&#xe005; </span>
+                                            <p><span class="glyphicon">&#xe062;</span> {{ post.location }}</p>
+                                            <p><span class="glyphicon">&#xe183;</span> {{ post.phone_number }}</p>
+                                            <span class="glyphicon">&#xe005;</span>
                                             <span class="text-muted likes-total{{ post.id }}">{{ post.liked.all.count }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
@@ -129,13 +123,13 @@
                                                 {% endfor %}
                                                 </div>
                                         </div>
-                                </div></a>
-                        </div>
+                                </div>
+                        </div></a>
                 </div>
         {% endfor %}
-    </div>
-    </div>
-    <footer>
-        <h1>資料已經到底了!</h1>
+</div>
+</div>
+<footer>
+    <h1>資料已經到底了!</h1>
 </footer>
 {% endblock %}
