@@ -50,22 +50,22 @@ for e in county_map_json["features"][0]["properties"]["COUNTYNAME"]:
 	print(e)
 """
 AREA_CHOICES=((1,'基隆市'),
-	(2,'台北市'),
+	(2,'臺北市'),
 	(3,'新北市'),
 	(4,'桃園市'),
 	(5,'新竹縣'),
 	(6, '新竹市'),
 	(7, '苗栗縣'),
 	(8, '南投縣'),
-	(9, '台中市'),
+	(9, '臺中市'),
 	(10, '彰化縣'),
 	(11, '雲林縣'),
 	(12, '嘉義縣'),
 	(13, '嘉義市'),
-	(14, '台南市'),
+	(14, '臺南市'),
 	(15, '高雄市'),
 	(16, '屏東縣'),
-	(17, '台東縣'),
+	(17, '臺東縣'),
 	(18, '宜蘭縣'),
 	(19, '花蓮縣'),
 	(20, '澎湖縣'),	
@@ -73,7 +73,7 @@ AREA_CHOICES=((1,'基隆市'),
 	(22, '連江縣'),)
 
 def home(request):
-	posts = Post.objects.filter(permanently_closed=False)
+	p = Post.objects.filter(permanently_closed=False)
 
 	#map
 	m = folium.Map(location=[23.97565,120.9738819], zoom_start=8, height="100%", position="initial")
@@ -82,77 +82,78 @@ def home(request):
 	style_county = {'color': 'rgba(41, 152, 202, 0.5)', 'line_opacity': 0.2 }
 	for geo in county_features:
 		geo["id"] = geo["properties"]["COUNTYID"]
-		county = folium.GeoJson(geo, name='縣市分區', style_function=lambda x:style_county, tooltip=geo["properties"]["COUNTYNAME"] ).add_to(m)
-	
-
-	style_attraction = {'color': 'red'}
-	style_restaurant = {'color': 'green', 'icon':'utensils', 'prefix':'fa'}
-	style_accomodation = {'color': 'blue', 'icon':'bed', 'prefix':'fa'}
-	
-	mCluster = MarkerCluster(name="所有景點").add_to(m)
-
-	for post in posts:
-		#popup = '<h1>' + post.title + '</h1>'
-		#tag
+		area_id = 0
+		for i in range(22):
+			if AREA_CHOICES[i][1] == geo["properties"]["COUNTYNAME"]:
+				area_id = i+1
+				break;
+		posts = p.filter(area = area_id)
+		county = folium.GeoJson(geo, name=geo["properties"]["COUNTYNAME"], style_function=lambda x:style_county, tooltip=f'{geo["properties"]["COUNTYNAME"]}:{posts.count()}' ).add_to(m)
 		
-		tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
-		tags_elements = ''
-		tag_list = []
-		for tp in tag_post:
-			tag = Tag.objects.get(id=tp.tag.id)
-			tag_list.append(tag)
-			tags_element = f'''
-				<span><a href="/tag/{ tag.pk }" class="badge badge-secondary" target="_parent" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>
+		mCluster = MarkerCluster(name="所有景點").add_to(county)
+
+		for post in posts:
+			#popup = '<h1>' + post.title + '</h1>'
+			#tag
+			
+			tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
+			tags_elements = ''
+			tag_list = []
+			for tp in tag_post:
+				tag = Tag.objects.get(id=tp.tag.id)
+				tag_list.append(tag)
+				tags_element = f'''
+					<span><a href="/tag/{ tag.pk }" class="badge badge-secondary" target="_parent" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>
+				'''
+				tags_elements = tags_elements + tags_element
+			tag_group = f'''
+				<div class="tag-group">{ tags_elements }</div>
 			'''
-			tags_elements = tags_elements + tags_element
-		tag_group = f'''
-			<div class="tag-group">{ tags_elements }</div>
-		'''
 
-		#stars
-		stars = '<span style="' + 'color:#ffbb04">'
-		for i in range(1,6):
-			if i <= post.stars:
-				stars = stars + '★'
+			#stars
+			stars = '<span style="' + 'color:#ffbb04">'
+			for i in range(1,6):
+				if i <= post.stars:
+					stars = stars + '★'
+				else:
+					stars = stars + '☆'
+			stars = stars + '</span>'
+
+			popup = '<div class="popup"><a href="/post/'+ str(post.pk) +'" target="_parent" style="text-decoration: none; color:#000"><h1>' + post.title + '</h1>'\
+				+ tag_group + '<h4>'+ post.location +'</h4>'\
+				+ '<h4>想去指數: '+ stars +'</h4>'
+			if post.imgur_url:
+				popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a>'
 			else:
-				stars = stars + '☆'
-		stars = stars + '</span>'
+				popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;"></a></div>'
 
-		popup = '<div class="popup"><a href="/post/'+ str(post.pk) +'" target="_parent" style="text-decoration: none; color:#000"><h1>' + post.title + '</h1>'\
-			+ tag_group + '<h4>'+ post.location +'</h4>'\
-			+ '<h4>想去指數: '+ stars +'</h4>'
-		if post.imgur_url:
-			popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a>'
-		else:
-			popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;"></a></div>'
-
-		match post.category:
-			case 1:
-				color = 'red'
-			case 2:
-				color = 'blue'
-			case 3:
-				color = 'green'
-		icon_config = False
-		
-		if tag_list:
-			for tag in tag_list:
-				if tag.imgur_url:
-					icon = folium.features.CustomIcon(tag.imgur_url,icon_size=(80, 80))
-					m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=icon, color=color)
-					icon_config = True
-					break;
-		if not icon_config:
 			match post.category:
 				case 1:
-					icon = ''
+					color = 'red'
 				case 2:
-					icon = 'bed'
+					color = 'blue'
 				case 3:
-					icon = 'cutlery'
-			m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=folium.Icon(icon=icon, color=color,prefix ='fa')) # 使用Font Awesome Icons
-		m2.add_to(mCluster)
-	
+					color = 'green'
+			icon_config = False
+			
+			if tag_list:
+				for tag in tag_list:
+					if tag.imgur_url:
+						icon = folium.features.CustomIcon(tag.imgur_url,icon_size=(80, 80))
+						m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=icon, color=color)
+						icon_config = True
+						break;
+			if not icon_config:
+				match post.category:
+					case 1:
+						icon = ''
+					case 2:
+						icon = 'bed'
+					case 3:
+						icon = 'cutlery'
+				m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=folium.Icon(icon=icon, color=color,prefix ='fa')) # 使用Font Awesome Icons
+			m2.add_to(mCluster)
+		
 	folium.LayerControl().add_to(m)
 
 	m=m._repr_html_()
