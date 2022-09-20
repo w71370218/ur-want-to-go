@@ -1,0 +1,325 @@
+html {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	font-size: 100%
+}
+
+a {
+	text-decoration: none;
+}
+
+.map {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+}
+
+.container {
+	margin-top: 30px;
+}
+
+.navbar {
+	list-style-type: none;
+	margin: 0;
+	padding: 1em;
+	text-align: center;
+
+	background-color: #343a40;
+	width: 100%;
+
+	border-radius: 0;
+}
+
+.navbar a {
+	color: rgba(255, 255, 255, .75);
+	display: flex;
+	align-content: center;
+}
+
+.navbar-brand {
+	padding-top: 0.5em;
+}
+
+.sidebar {
+	width: 20%;
+}
+
+.title {
+	font-size: 150%;
+	overflow: hidden;
+	max-width: 300px;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	white-space: normal;
+}
+
+.date {
+	font-size: 80%;
+	color: #5b6670;
+}
+
+.col-md-4 {
+	width: 360px;
+	margin-right: 1rem;
+	margin-top: 2rem;
+}
+
+.row {
+	margin-right: 0;
+	margin-left: 0;
+	margin-bottom: 3rem;
+}
+
+.post-body {
+	padding: 0 2rem 1rem;
+}
+
+.box-shadow {
+	width: 360px;
+	box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .25);
+}
+
+.raphael-group-48-fc-gradient-legend {
+	display: none;
+}
+
+div.img>img,
+div.post-img>img {
+	max-width: 100%;
+	max-height: 100%;
+	display: block;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	margin: auto;
+	position: absolute;
+}
+
+img {
+	max-width: 100%;
+}
+
+#text {
+	max-width: 100%;
+}
+
+.img {
+	height: 225px;
+	width: 360px;
+	border: 1px;
+	position: relative;
+}
+
+.img .bg {
+	-webkit-filter: blur(3px) opacity(0.5);
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.post-img {
+	height: 50vh;
+	width: 100%;
+	border: 1px;
+	position: relative;
+}
+
+.post-detail {
+	margin-top: 2rem;
+	width: 100%;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.post-text {
+	height: 72px;
+	max-width: 300px;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	white-space: normal;
+}
+
+.post-location {
+	height: 24px;
+	max-width: 300px;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	white-space: normal;
+}
+
+.comment-body {
+	height: 96px;
+	line-height: 24px;
+	overflow: hidden;
+	display: inline-block;
+}
+
+.btn-group {
+	display: inline-flex;
+	height: 30px;
+}
+
+.tag-group {
+	min-height: 2em;
+	display: flex;
+	align-items: center;
+}
+
+footer {
+	margin-top: 5rem;
+	text-align: center;
+}
+
+@media screen and (min-width:720px) {
+	.navbar {
+		padding: 0.1em;
+		min-height: 50px;
+	}
+}
+
+@media screen and (max-width:1080px) {
+	.navbar {
+		min-height: 120px;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 1040;
+		font-size: 16px;
+		padding: 1em;
+	}
+
+	.navbar-brand,
+	.navbar-nav>li>a {
+		font-size: 50px;
+	}
+
+	.context {
+		font-size: 60px;
+	}
+
+	div.context>h2 {
+		font-size: 60px;
+	}
+
+	.title {
+		font-size: 150%;
+		overflow: hidden;
+		max-width: 300px;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		white-space: normal;
+	}
+
+	.col-md-4 {
+		width: 100%;
+		margin-right: 2rem;
+		margin-top: 2rem;
+	}
+
+	.navbar-right {
+		float: none !important;
+	}
+
+	.container {
+		width: 100%;
+		margin-top: 180px;
+	}
+
+	.row {
+		width: 100%;
+	}
+
+	.post,
+	.mb-4,
+	.box-shadow {
+		width: 100%;
+	}
+
+	.post-text {
+		max-width: 100%;
+	}
+
+	.img {
+		width: 100%;
+		height: 50vh;
+	}
+
+	.badge {
+		font-size: 35px;
+		min-width: 75px;
+	}
+
+	.title {
+		font-size: 64px;
+		display: block;
+		max-width: 100%;
+	}
+
+	.post-text {
+		min-height: 8.5vh;
+		max-width: 100%;
+		font-size: 40px;
+	}
+
+	.post-location {
+		min-height: 50px;
+		max-width: 100%;
+	}
+
+	.post-body {
+		font-size: 35px;
+	}
+
+	.btn-group {
+		width: 100%;
+		display: flex;
+		align-items: baseline;
+
+
+	}
+
+	.btn-group button {
+		width: 100%;
+		min-height: 60px;
+		font-size: 40px;
+	}
+
+	form button {
+		min-height: 60px;
+		font-size: 40px;
+		min-width: 60px;
+	}
+
+	form {
+		display: flex;
+		align-content: space-around;
+	}
+
+	form input {
+		width: 100%;
+	}
+
+	.post-img {
+		width: 100%;
+	}
+
+	.post-detail {
+		font-size: 50px;
+	}
+
+	.post-innertext>h1,
+	.post-innertext>h2,
+	.post-innertext>h3,
+	.post-innertext>h4,
+	.post-innertext>h5 {
+		font-size: 100%;
+	}
+}

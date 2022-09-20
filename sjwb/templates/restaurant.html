@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}
+	<title>餐廳 | 想玩的地點</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+                <div class="context">
+                {% if request.user.is_authenticated %}
+		<p>Welcome, {{ user.username }}</p>
+	{% endif %}
+	<h2>餐廳 restaurant</h2>
+        <p>總共有 {{ post_count }} 筆資料</p>
+    {% if messages %}
+    <ul class="massages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+            {% for post,comment in post_list %}
+                <div class="col-md-4">
+                <a href="{% url 'post_detail' pk=post.pk %}" style="text-decoration:none; color: inherit;">
+                        <div class="post mb-4 box-shadow">
+                                <div class="img">
+                                    {% if post.photo.url is not null %}
+                                        <div class="img bg" style="background: url({{ post.imgur_url }});"></div>
+                                        <img class="post-img-top" src="{{ post.imgur_url }}">
+                                    {% else %}
+                                        <div class="img bg" style="background: url('/media/img/no_image.jpg');"></div>
+                                        <img class="post-img-top" src="/media/no_image.jpg">
+                                    {% endif %}
+                                </div>
+                                <div class="post-body">
+                                        <div class="tag-group">
+                                                {% if post.taglist != None  %}
+                                                        {% for tag in post.taglist %}
+                                                                <span><a href="{% url 'tag' pk=tag.pk %}" class="badge badge-secondary" style="background-color: {{ tag.color }};">{{ tag.name }}</a></span>
+                                                        {% endfor %}
+                                                {% endif %}
+                                        </div>
+                                        <p class="title" href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</p>
+                                        <p>
+                                                想去指數: 
+                                                <span style="color:#ffbb04">
+                                                    {% for i in range %}
+                                                        {% if i  <=  post.stars %}
+                                                            ★
+                                                        {% else %}
+                                                            ☆
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </span>
+                                            </p>
+                                        <p class="post-text">{{ post.text }}</p>
+                                        <div>
+                                                <div class="post-location">
+                                                        <p><span class="glyphicon">&#xe062;</span> {{ post.location }}</p>
+                                                </div>
+                                                <div class="post-location">
+                                                        <p><span class="glyphicon">&#xe183;</span> {% if post.phone_number != None %} {{ post.phone_number }}{% endif %}</p>
+                                                </div>
+                                            <span class="glyphicon">&#xe005;</span>
+                                            <span class="text-muted likes-total{{ post.id }}">{{ post.liked.all.count }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                                <div class="btn-group">
+                                                {% if request.user.is_authenticated %}
+                                                        {% if request.user.id != post.author.id %}
+                                                                <form action="{% url 'like_post' %}" id="{{ post.id }}" method="POST" class="like-form">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="post_pk" id="{{ post.id }}" value="{{ post.pk }}">
+                                                                        <button type="submit" class="btn btn-default btn-sm btn-outline-secondary like-btn{{ post.id }}">
+                                                                                {% if user not in post.liked.all %}
+                                                                                        &#x1F90D; Like
+                                                                                        </button>
+                                                                                {% else %}
+                                                                                        &#129505; Unlike
+                                                                                        </button>
+                                                                                {% endif %}
+                                                                </form>
+                                                                
+                                                        {% else %}
+                                                                <form action="{% url 'like_post' %}" id="{{ post.id }}" method="POST" class="like-form">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="post_pk" id="{{ post.id }}" value="{{ post.pk }}">
+                                                                        <button type="submit" class="btn btn-default btn-sm btn-outline-secondary like-btn{{ post.id }}">
+                                                                        {% if user not in post.liked.all %}
+                                                                                &#x1F90D; Like
+                                                                                </button>
+                                                                        {% else %}
+                                                                                &#129505; Unlike
+                                                                                </button>
+                                                                        {% endif %}
+                                                                </form>
+                                                        <button type="button" class="btn btn-default btn-sm btn-outline-secondary">
+                                                                <a href="{% url 'post_edit' pk=post.pk%}" style="text-decoration:none; color: inherit;">Edit</a>
+                                                        </button>
+                                                        <button type="button" class="btn btn-default btn-sm btn-outline-secondary">
+                                                                <a href="{% url 'post_delete' pk=post.pk %}" style="text-decoration:none; color: inherit;">Delete</a>
+                                                        </button>
+                                                        {% endif %}
+                                                {% endif %}
+                                                </div>
+                                                <div><small class="text-muted">{{ post.created_date }}</small></div> 
+                                                <form action="{% url 'post_new_comment' post.id %}" method = "POST">
+                                                        {% csrf_token %}
+                                                        {% if request.user.is_authenticated %}
+                                                                <input type="hidden" value="{{ request.user.username }}" name="comment_man">
+                                                        {% else %}
+                                                                <input type="hidden" value="訪客" name="comment_man">
+                                                        {% endif %}
+                                                        <input type="search" placeholder="歡迎留言" name="comment_content">
+                                                        <button type="submit", class="btn btn-default btn-sm btn-outline-secondary">送出</button>
+                                                </form>
+                                                <div class="comment-body">
+                                                    {% for co in comment %}
+                                                <div class="comment">
+                                                    {{ co.comment_man }}說：{{ co.comment_content }}
+                                                    <div>
+                                                        <small class="text-muted comment_date">{{ co.comment_date }}</small>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                                </div>
+                                        </div>
+                                </div>
+                        </div></a>
+                </div>
+        {% endfor %}
+</div>
+</div>
+<footer>
+    <h1>資料已經到底了!</h1>
+</footer>
+{% endblock %}

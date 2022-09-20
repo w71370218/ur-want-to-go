@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}
+	<title>登入 | SIRLA 許願瓶</title>
+{% endblock title %}
+
+{% block content %}
+	<h1>Login</h1>
+	<form action="{% url 'login' %}" method="post" class="login">
+		{% csrf_token %}
+		<table>
+			<tr>
+				<td>{{ form.username.label_tag }}</td>
+				<td>{{ form.username }}</td>
+			</tr>
+			<tr>
+				<td>{{ form.password.label_tag }}</td>
+				<td>{{ form.password }}</td>
+			</tr>
+		</table>
+		<a href="{% url 'password_reset' %}">忘記密碼</a>
+		<input type="submit" value="login">
+	</form>
+{% endblock %}

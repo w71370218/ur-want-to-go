@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+{% load markdown_extras %}
+
+{% block title %}
+	<title>{{ post.title }} | 想玩的地點</title>
+{% endblock %}
+
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
+        <meta name="Author" content="UR">
+        <meta property="og:title" content="{{ post.title }} | 想玩的地點"/>
+        <meta property="og:description" content="{{ post.text|slice:":35" }}"/>
+        <meta property="og:image" content="{{ post.imgur_url }}"/>
+</head>
+<div class="container">
+	<div class="post-detail">
+		<div class="post-img">
+            {% if post.photo.url is not null %}
+                <img class="post-img-top" src="{{ post.imgur_url }}">
+            {% else %}
+                <img class="post-img-top" src="/media/no_image.jpg">
+            {% endif %}
+        </div>
+        {% if post.taglist != None  %}
+            {% for tag in post.taglist %}
+		        <span><a href="{% url 'tag' pk=tag.pk %}" class="badge badge-secondary" style="background-color: {{ tag.color }};"><span class="glyphicon  glyphicon-tag"></span>  {{ tag.name }}</a></span>
+            {% endfor %}
+        {% endif %}
+		<h2 class="title">{{ post.title }}</h2>
+        <div class="date">
+            <p><span class="glyphicon">&#xe023;</span> 發佈時間:  {{ post.created_date }}</p>
+            <p><span class="glyphicon">&#xe023;</span> 最後編輯時間:  {{ post.published_date }}</p>
+        </div>
+        <p>
+            想去指數: 
+            <span style="color:#ffbb04">
+                {% for i in range %}
+                    {% if i  <=  post.stars %}
+                        ★
+                    {% else %}
+                        ☆
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </p>
+        <div>
+            <p><span class="glyphicon">&#xe062;</span> {{ post.location }}</p>
+            {% if post.category != 1 %}
+                <p><span class="glyphicon">&#xe183;</span> {{ post.phone_number }}</p>
+            {% endif %}
+            <span class="glyphicon">&#xe005;</span>
+            <span class="text-muted likes-total{{ post.id }}">{{ post.liked.all.count }}</span>
+        </div>
+        <div class="btn-group">
+        {% if request.user.is_authenticated %}
+            {% if request.user.id != post.author.id %}
+                <form action="{% url 'like_post' %}" id="{{ post.id }}" method="POST" class="like-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="post_pk" id="{{ post.id }}" value="{{ post.pk }}">
+                    <button type="submit" class="btn btn-default btn-sm btn-outline-secondary like-btn{{ post.id }}">
+                        {% if user not in post.liked.all %}
+                            Like
+                    </button>
+                        {% else %}
+                            Unlike
+                    </button>
+                        {% endif %}
+                    </form>
+                    <button type="submit" class="btn btn-default btn-sm btn-outline-secondary">Comment</button>
+            {% else %}
+                <form action="{% url 'like_post' %}" id="{{ post.id }}" method="POST" class="like-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="post_pk" id="{{ post.id }}" value="{{ post.pk }}">
+                    <button type="submit" class="btn btn-default btn-sm btn-outline-secondary like-btn{{ post.id }}">
+                        {% if user not in post.liked.all %}
+                            Like
+                        </button>
+                        {% else %}
+                             Unlike
+                         </button>
+                        {% endif %}
+                    </form>
+                    <button type="button" class="btn btn-default btn-sm btn-outline-secondary">
+                        <a href="{% url 'post_edit' pk=post.pk%}" style="text-decoration:none; color: inherit;">Edit</a>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm btn-outline-secondary">
+                        <a href="{% url 'post_delete' pk=post.pk %}" style="text-decoration:none; color: inherit;">Delete</a>
+                    </button>
+            {% endif %}
+        {% endif %}
+        <br/>
+        {% for co in comment %}
+            <div>
+                {{ co.comment_man }}說：{{ co.comment_content }}
+                <small class="text-muted comment_date">{{ co.comment_date }}</small>
+            </div>
+        {% endfor %}
+        <br/>
+</div>
+<div class="post-innertext">
+    <p>{{ post.text | markdown | safe | linebreaks }}</p>
+    <div class="text-center" style="height: 100%;">
+        {{ my_map|safe }}
+    </div>
+</div>
+
+{% endblock %}

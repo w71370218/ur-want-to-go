@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+	<title>想要去玩的地點</title>
+{% endblock %}
+
+{% block content %}
+<script src="{% static 'js/map.js' %}"></script>
+	<div class="text-center map" style="height: 100%;">
+		{{ my_map|safe }}
+	</div>
+
+{% endblock %}
