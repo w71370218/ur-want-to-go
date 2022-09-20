@@ -80,15 +80,16 @@ def home(request):
 	
 	# County layer
 	style_county = {'color': 'rgba(41, 152, 202, 0.5)', 'line_opacity': 0.2 }
-	for geo in county_features:
-		geo["id"] = geo["properties"]["COUNTYID"]
+	for i in range(22):
 		area_id = 0
-		for i in range(22):
+		for geo in county_features:
 			if AREA_CHOICES[i][1] == geo["properties"]["COUNTYNAME"]:
 				area_id = i+1
 				break;
 		posts = p.filter(area = area_id)
-		county = folium.GeoJson(geo, name=geo["properties"]["COUNTYNAME"], style_function=lambda x:style_county, tooltip=f'{geo["properties"]["COUNTYNAME"]}:{posts.count()}' ).add_to(m)
+		county = folium.GeoJson(geo, name=geo["properties"]["COUNTYNAME"], style_function=lambda x:style_county, tooltip=f'{geo["properties"]["COUNTYNAME"]}:{posts.count()}',\
+			#popup=f'<a href="/area/?ID={area_id}" target="_parent" style="text-decoration: none; color:#000">查看所有{geo["properties"]["COUNTYNAME"]}的貼文</a>'\
+			).add_to(m)
 		
 		mCluster = MarkerCluster(name="所有景點").add_to(county)
 
@@ -119,13 +120,22 @@ def home(request):
 					stars = stars + '☆'
 			stars = stars + '</span>'
 
-			popup = '<div class="popup"><a href="/post/'+ str(post.pk) +'" target="_parent" style="text-decoration: none; color:#000"><h1>' + post.title + '</h1>'\
-				+ tag_group + '<h4>'+ post.location +'</h4>'\
-				+ '<h4>想去指數: '+ stars +'</h4>'
 			if post.imgur_url:
-				popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a>'
+				img  ='<img src="'+ post.imgur_url + '" style="width:350px;">'
 			else:
-				popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;"></a></div>'
+				img  = '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;">'
+
+			popup = f'''<div class="popup">
+				<a href="/post/{str(post.pk)}" target="_parent" style="text-decoration: none; color:#000">
+				<h1>{post.title}</h1>
+				</a>
+				{tag_group} 
+				<a href="/post/{str(post.pk)}" target="_parent" style="text-decoration: none; color:#000">
+				<h4>{post.location} </h4>
+				<h4>想去指數: {stars} </h4> 
+				{img} 
+				</a></div>'''
+			
 
 			match post.category:
 				case 1:
@@ -324,7 +334,7 @@ def post_detail(request, pk):
 		+ tag_group + '<h4>'+ post.location +'</h4>'\
 		+ '<h4>想去指數: '+ stars +'</h4>'
 	if post.imgur_url:
-		popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a>'
+		popup  = popup + '<img src="'+ post.imgur_url + '" style="width:350px;"></a></div>'
 	else:
 		popup  = popup + '<img src="'+ "/media/no_image.jpg" + '" style="width:350px;"></a></div>'
 

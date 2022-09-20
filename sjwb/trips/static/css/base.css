@@ -166,9 +166,10 @@ img {
 }
 
 .tag-group {
-	min-height: 2em;
-	display: flex;
+	min-height: 1.5em;
+	max-height: 1.5em;
 	align-items: center;
+	overflow: hidden;
 }
 
 footer {
