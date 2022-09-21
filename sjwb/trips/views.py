@@ -219,7 +219,7 @@ def area(request):
 	post_count = post.count()
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
-	return render(request, 'area.html', {'post_count':post_count,'post_list': post_list,'area_title':area_title, 'user':user, 'range': range(5,0,-1)})
+	return render(request, 'area.html', {'post_count':post_count,'post_list': post_list,'area_title':area_title, 'user':user, 'range': range(1,6)})
 
 def attraction(request):
 	post = Post.objects.filter(category=1,permanently_closed=False).order_by('-stars', '-created_date')
