@@ -17,8 +17,6 @@ window.onload = (event) => {
     const SVG_NS = 'http://www.w3.org/2000/svg';
     svg_element.setAttributeNS(XLink_NS, 'xlink:href', "")
 
-    console.log(svg_element)
-
     node_element = iframe.getElementsByTagName("g")[0]
     for (var i = 1; i <= 22; i++) {
         let new_ele = iframe.createElementNS(SVG_NS, "a");
@@ -29,7 +27,6 @@ window.onload = (event) => {
         const node = node_element.getElementsByTagName("path")[0];
         new_ele.appendChild(node);
     }
-    console.log(node_element)
 
     //var layerControl = document.getElementsByClassName("leaflet-right")
     //layerControl[0].style = "margin-top: 180px ;"

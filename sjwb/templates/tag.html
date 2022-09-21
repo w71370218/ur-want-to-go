@@ -20,6 +20,13 @@
         {% endfor %}
     </ul>
     {% endif %}
+    <div class="card card-body">
+        <form class="query-filter" id="query-filter" method="get">
+                {{ my_filter.form }}
+                <button class="btn btn-primary" id="query-filter-submit" type="submit" style="display:none"> 
+                        查詢</button
+        </form>
+    </div>
 </div>
             {% for post,comment in post_list %}
                 <div class="col-md-4">

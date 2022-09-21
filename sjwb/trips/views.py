@@ -8,6 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse
+from .filters import PostFilter
 #folium
 import folium
 from folium.plugins import MarkerCluster
@@ -174,6 +175,8 @@ def home(request):
 def tag(request, pk):
 	tag_name = Tag.objects.get(pk=pk)
 	post = Post.objects.filter(tags=pk, permanently_closed=False)
+	my_filter = PostFilter(request.GET,queryset=post)
+	post = my_filter.qs
 
 	art_comment = []
 	for po in post:
@@ -193,7 +196,8 @@ def tag(request, pk):
 	post_list = zip(post, art_comment)
 	post_count = post.count()
 	comment_form = post_comment_form()
-	return render(request, 'tag.html', {'post_count':post_count,'tag_name':tag_name, 'post_list':post_list, 'range': range(1,6)})
+	return render(request, 'tag.html', {'post_count':post_count,'tag_name':tag_name, 'post_list':post_list, 'range': range(1,6),
+		'my_filter':my_filter})
 
 def area(request):
 	url = request.build_absolute_uri()
@@ -223,6 +227,8 @@ def area(request):
 
 def attraction(request):
 	post = Post.objects.filter(category=1,permanently_closed=False).order_by('-stars', '-created_date')
+	my_filter = PostFilter(request.GET,queryset=post)
+	post = my_filter.qs
 	user = request.user
 	art_comment = []
 	for po in post:
@@ -240,17 +246,22 @@ def attraction(request):
 		po.taglist = ordered_tag
 
 	post_count = post.count()
+	
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
+
 	return render(request, 'attraction.html', {
 		'post_count':post_count,
 		'post_list': post_list,
 		'user':user,
-		'range': range(1,6)
+		'range': range(1,6),
+		'my_filter':my_filter
 		})
 
 def accomodation(request):
 	post = Post.objects.filter(category=2,permanently_closed=False).order_by('-stars', '-created_date')
+	my_filter = PostFilter(request.GET,queryset=post)
+	post = my_filter.qs
 	user = request.user
 	art_comment = []
 	for po in post:
@@ -271,12 +282,15 @@ def accomodation(request):
 		'post_count':post_count,
 		'post_list': post_list,
 		'user':user,
-		'range': range(1,6)
+		'range': range(1,6),
+		'my_filter':my_filter
 		})
 
 
 def restaurant(request):
 	post = Post.objects.filter(category=3,permanently_closed=False).order_by('-stars', '-created_date')
+	my_filter = PostFilter(request.GET,queryset=post)
+	post = my_filter.qs
 	user = request.user
 	art_comment = []
 	for po in post:
@@ -297,7 +311,8 @@ def restaurant(request):
 		'post_count':post_count,
 		'post_list': post_list,
 		'user':user,
-		'range': range(1,6)
+		'range': range(1,6),
+		'my_filter':my_filter
 		})
 
 def post_detail(request, pk):
@@ -485,11 +500,3 @@ def post_new_comment(request, post_id):
 			return redirect('/attraction')
 		else:
 			return redirect('/attraction')
-
-def post_filter(request):
-	##未完成
-	if request.method == 'GET':
-		print(request.headers)
-		print(request.GET)
-		print(request.GET.get('select_s'))
-		return render()
