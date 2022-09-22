@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse
-from .filters import PostFilter
+from .filters import PostFilter, AreaPageFilter
 #folium
 import folium
 from folium.plugins import MarkerCluster
@@ -205,12 +205,17 @@ def area(request):
 	area_ID = ''
 	d = False
 	for s in url:
+		if s == '&':
+			break
 		if s == '=':
 			d = True
 		elif s.isdigit() and d == True:
 			area_ID+=str(s)
 		count+=1
 	post = Post.objects.filter(area=area_ID,permanently_closed=False).order_by('-stars', '-created_date')
+
+	my_filter = AreaPageFilter(request.GET,queryset=post)
+	post = my_filter.qs
 
 	area_title = AREA_CHOICES[int(area_ID)-1][1]
 	user = request.user
@@ -223,7 +228,8 @@ def area(request):
 	post_count = post.count()
 	post_list = zip(post, art_comment)
 	comment_form = post_comment_form()
-	return render(request, 'area.html', {'post_count':post_count,'post_list': post_list,'area_title':area_title, 'user':user, 'range': range(1,6)})
+	return render(request, 'area.html', {'post_count':post_count,'post_list': post_list,'area_title':area_title, 'user':user, 'range': range(1,6),
+		'my_filter':my_filter,'area_ID':area_ID})
 
 def attraction(request):
 	post = Post.objects.filter(category=1,permanently_closed=False).order_by('-stars', '-created_date')

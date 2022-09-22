@@ -177,6 +177,7 @@ footer {
 	text-align: center;
 }
 
+
 @media screen and (min-width:720px) {
 	.navbar {
 		padding: 0.1em;
@@ -203,6 +204,7 @@ footer {
 
 	.context {
 		font-size: 60px;
+		max-width: 100%;
 	}
 
 	div.context>h2 {
@@ -276,7 +278,7 @@ footer {
 	}
 
 	.post-body {
-		font-size: 35px;
+		font-size: 280%;
 	}
 
 	.btn-group {
@@ -322,5 +324,19 @@ footer {
 	.post-innertext>h4,
 	.post-innertext>h5 {
 		font-size: 100%;
+	}
+
+	.query-filter {
+		max-width: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	option {
+		font-size: 35%;
+	}
+
+	button {
+		font-size: 100% !important;
 	}
 }

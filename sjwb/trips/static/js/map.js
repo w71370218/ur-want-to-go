@@ -22,7 +22,7 @@ window.onload = (event) => {
         let new_ele = iframe.createElementNS(SVG_NS, "a");
         //new_ele.setAttribute('href', "/area?=" + i);
         new_ele.setAttributeNS(null, 'target', "_parent");
-        new_ele.setAttributeNS(XLink_NS, 'xlink:href', "/area?=" + i);
+        new_ele.setAttributeNS(XLink_NS, 'xlink:href', "/area/?area=" + i);
         node_element.appendChild(new_ele);
         const node = node_element.getElementsByTagName("path")[0];
         new_ele.appendChild(node);
