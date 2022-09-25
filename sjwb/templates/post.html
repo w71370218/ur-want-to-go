@@ -102,6 +102,16 @@
 </div>
 <div class="post-innertext">
     <p>{{ post.text | markdown | safe | linebreaks }}</p>
+    <div><h1>附近十公里以內的點</h1></div>
+    {% for item in nearby %}
+    <div>
+        <a href="{% url 'post_detail' pk=item.pk %}">
+        <div>{{item.title}}</div>
+        <div>{{item.location}}</div>
+        <div>{{item.distance}}</div>
+        </a>
+    </div>
+    {% endfor %}
     <div class="text-center" style="height: 100%;">
         {{ my_map|safe }}
     </div>

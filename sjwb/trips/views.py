@@ -10,7 +10,9 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse
+from django.db.models import Q
 from .filters import PostFilter
+from math import sin, cos, sqrt, atan2, radians
 # folium
 import folium
 from folium.plugins import MarkerCluster
@@ -98,7 +100,7 @@ def home(request):
         mCluster = MarkerCluster(name="所有景點").add_to(county)
 
         for post in posts:
-            #popup = '<h1>' + post.title + '</h1>'
+            # popup = '<h1>' + post.title + '</h1>'
             # tag
 
             tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
@@ -133,11 +135,11 @@ def home(request):
 				<a href="/post/{str(post.pk)}" target="_parent" style="text-decoration: none; color:#000">
 				<h1>{post.title}</h1>
 				</a>
-				{tag_group} 
+				{tag_group}
 				<a href="/post/{str(post.pk)}" target="_parent" style="text-decoration: none; color:#000">
 				<h4>{post.location} </h4>
-				<h4>想去指數: {stars} </h4> 
-				{img} 
+				<h4>想去指數: {stars} </h4>
+				{img}
 				</a></div>'''
 
             match post.category:
@@ -346,6 +348,31 @@ def restaurant(request):
 
 def post_detail(request, pk):
     post = Post.objects.get(pk=pk)
+    posts = Post.objects.filter(~Q(pk=pk))
+
+    nearby = []
+    R = 6373.0
+    lat1 = radians(post.lat)
+    lon1 = radians(post.lng)
+    for po in posts:
+        lat2 = radians(po.lat)
+        lon2 = radians(po.lng)
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        distance = R * c
+        if distance <= 10:
+            po.distance = distance
+            nearby.append(po)
+            # print(po, distance)
+    nearby = sorted(nearby, key=lambda x: x.distance)
+    for item in nearby:
+        if item.distance < 1:
+            item.distance = str(int(item.distance*1000))+" 公尺"
+        else:
+            item.distance = str(int(item.distance))+" 公里"
+
     # tag
     tag_post = Tag_post.objects.filter(post=post.id).order_by("order")
     ordered_tag = []
@@ -353,13 +380,11 @@ def post_detail(request, pk):
     for tp in tag_post:
         tag = Tag.objects.get(id=tp.tag.id)
         ordered_tag.append(tag)
-        tags_element = f'''
-				<span><a href="/tag/{ tag.pk }" class="badge badge-secondary" target="_parent" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>
-			'''
+        tags_element = f'''<span><a href="/tag/{ tag.pk }" class="badge badge-secondary" target="_parent" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>'''
         tags_elements = tags_elements + tags_element
     tag_group = f'''
-			<div class="tag-group">{ tags_elements }</div>
-		'''
+		<div class="tag-group">{ tags_elements }</div>
+	'''
     post.taglist = ordered_tag
 
     # folium map
@@ -415,10 +440,8 @@ def post_detail(request, pk):
 
     m2.add_to(m)
     folium.LayerControl().add_to(m)
-
     m = m._repr_html_()
-
-    return render(request, 'post.html', {'my_map': m, 'post': post, 'range': range(1, 6)})
+    return render(request, 'post.html', {'my_map': m, 'post': post, 'range': range(1, 6), 'nearby': nearby})
 
 
 def post_new(request):
