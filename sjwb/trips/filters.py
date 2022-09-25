@@ -15,8 +15,10 @@ STARS_CHOICES = (
     (5, '5星'),
 )
 
+
 class PostFilter(django_filters.FilterSet):
-    stars = ChoiceFilter(label='想去指數',choices=STARS_CHOICES, field_name='stars')
+    stars = ChoiceFilter(
+        label='想去指數', choices=STARS_CHOICES, field_name='stars')
     order = OrderingFilter(
         label='排序',
         empty_label='預設排序(最想去)',
@@ -24,19 +26,27 @@ class PostFilter(django_filters.FilterSet):
             ('published_date', 'published_date'),
             ('stars'),
         ),
-         field_labels={
+        field_labels={
             'published_date': '更新日期',
             'stars': '想去指數',
+        },
+        choices={
+            ('published_date', '更新日期↑'),
+            ('-published_date', '更新日期↓(最新)'),
+            ('stars', '想去指數↑'),
+            ('-stars', '想去指數↓(最想去)'),
         }
-        )
-    text = CharFilter(label='關鍵字',method='my_custom_filter')
+    )
+    text = CharFilter(label='關鍵字', method='my_custom_filter')
+
     class Meta:
         model = Post
         fields = ['area']
 
     def my_custom_filter(self, queryset, name, value):
         return queryset.filter(
-            Q(title__icontains=value) | Q(text__icontains=value) | Q(tags__name__icontains=value)
+            Q(title__icontains=value) | Q(text__icontains=value) | Q(
+                tags__name__icontains=value)
         ).distinct()
 
     def __init__(self, *args, **kwargs):
@@ -44,37 +54,6 @@ class PostFilter(django_filters.FilterSet):
         for filter in self.filters:
             if filter != 'text' and filter != 'order':
                 self.filters[filter].extra.update(
-                {'empty_label': '請選擇'})
-            if  filter== 'area':
+                    {'empty_label': '請選擇'})
+            if filter == 'area':
                 self.filters[filter].label = "地區"
-
-class AreaPageFilter(django_filters.FilterSet):
-    stars = ChoiceFilter(label='想去指數',choices=STARS_CHOICES, field_name='stars')
-    order = OrderingFilter(
-        label='排序',
-        empty_label='預設排序(最想去)',
-        fields=(
-            ('published_date', 'published_date'),
-            ('stars'),
-        ),
-         field_labels={
-            'published_date': '更新日期',
-            'stars': '想去指數',
-        }
-        )
-    text = CharFilter(label='關鍵字',method='my_custom_filter')
-    class Meta:
-        model = Post
-        fields = ['area']
-
-    def my_custom_filter(self, queryset, name, value):
-        return queryset.filter(
-            Q(title__icontains=value) | Q(text__icontains=value) | Q(tags__name__icontains=value)
-        ).distinct()
-
-    def __init__(self, *args, **kwargs):
-        super(AreaPageFilter, self).__init__(*args, **kwargs)
-        for filter in self.filters:
-            if filter != 'text' and filter != 'order':
-                self.filters[filter].extra.update(
-                {'empty_label': '請選擇'})
