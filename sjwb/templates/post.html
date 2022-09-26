@@ -104,6 +104,10 @@
 <div class="post-innertext">
     <p>{{ post.text | markdown | safe | linebreaks }}</p>
     <div class="b-example-divider"></div>
+    <div class="text-center" style="height: 100%;">
+        {{ my_map|safe }}
+    </div>
+    {% if nearby %}
     <div class=" px-4 py-5">
         <div class="pb-2 border-bottom "><h2>附近十公里以內的點</h2></div>
         <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
@@ -130,7 +134,7 @@
                                   <small>{{item.location}}</small>
                                 </li>
                                 <li class="d-flex align-items-center">
-                                  <small>{{item.distance}}</small>
+                                  <small>距離 {{item.distance}}</small>
                                 </li>
                               </ul>
                         </div>
@@ -141,9 +145,7 @@
             {% endfor %}
         </div>
     </div>
-    <div class="text-center" style="height: 100%;">
-        {{ my_map|safe }}
-    </div>
+    {% endif %}
 </div>
 
 {% endblock %}

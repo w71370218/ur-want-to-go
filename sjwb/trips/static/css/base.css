@@ -198,6 +198,11 @@ footer {
 	height: 90%;
 }
 
+input[type=checkbox] {
+	width: 0.8em;
+	height: 0.8em;
+}
+
 @media screen and (min-width:720px) {
 	.navbar {
 		padding: 0.1em;
