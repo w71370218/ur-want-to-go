@@ -441,7 +441,7 @@ def post_detail(request, pk):
     m2.add_to(m)
     folium.LayerControl().add_to(m)
     m = m._repr_html_()
-    return render(request, 'post.html', {'my_map': m, 'post': post, 'range': range(1, 6), 'nearby': nearby})
+    return render(request, 'post.html', {'my_map': m, 'post': post, 'range': range(1, 6), 'nearby': nearby[:4]})
 
 
 def post_new(request):
@@ -566,3 +566,54 @@ def post_new_comment(request, post_id):
             return redirect('/attraction')
         else:
             return redirect('/attraction')
+
+
+def post_nearby(request, pk):
+    post = Post.objects.get(pk=pk)
+    posts = Post.objects.filter(~Q(pk=pk))
+
+    nearby = []
+    R = 6373.0
+    lat1 = radians(post.lat)
+    lon1 = radians(post.lng)
+
+    art_comment = []
+    for po in posts:
+        # comment
+        if po.comment_set.all():
+            art_comment.append(po.comment_set.all())
+        else:
+            art_comment.append([])
+
+        # tag
+        tag_post = Tag_post.objects.filter(post=po.id).order_by("order")
+        ordered_tag = []
+        for tp in tag_post:
+            ordered_tag.append(Tag.objects.get(id=tp.tag.id))
+        po.taglist = ordered_tag
+
+        lat2 = radians(po.lat)
+        lon2 = radians(po.lng)
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        distance = R * c
+        if distance <= 10:
+            po.distance = distance
+            nearby.append(po)
+            # print(po, distance)
+
+    nearby = sorted(nearby, key=lambda x: x.distance)
+    for item in nearby:
+        if item.distance < 1:
+            item.distance = str(int(item.distance*1000))+" 公尺"
+        else:
+            item.distance = str(int(item.distance))+" 公里"
+
+    post_list = zip(nearby, art_comment)
+    post_count = len(nearby)
+    comment_form = post_comment_form()
+    return render(request, 'post_nearby.html',
+                  {'post_count': post_count, 'post_name': post, 'post_list': post_list, 'range': range(1, 6)
+                   })

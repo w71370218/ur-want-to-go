@@ -19,13 +19,13 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views
-from trips.views import home, attraction, accomodation, restaurant, post_detail, post_new, post_delete, post_edit, register, area, like_post, post_serialized_view, post_new_comment, tag
+from trips.views import home, attraction, accomodation, restaurant, post_detail, post_new, post_delete, post_edit, register, area, like_post, post_serialized_view, post_new_comment, tag, post_nearby
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name="home"),
-    path('Like',like_post,name='like_post'),
+    path('Like', like_post, name='like_post'),
     path('serialized/', post_serialized_view, name='serialized_view'),
     path('area/', area, name="area"),
     path('attraction/', attraction, name='attraction'),
@@ -33,10 +33,12 @@ urlpatterns = [
     path('restaurant/', restaurant, name='restaurant'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('register/', register, name='register'),
-    re_path(r'^post/post_new_comment/(?P<post_id>[0-9]+)/$', post_new_comment, name='post_new_comment'),
+    re_path(r'^post/post_new_comment/(?P<post_id>[0-9]+)/$',
+            post_new_comment, name='post_new_comment'),
     re_path(r'^post/(?P<pk>\d+)/$', post_detail, name="post_detail"),
     re_path(r'^post/new/$', post_new, name='post_new'),
     re_path(r'^post/(?P<pk>[0-9]+)/delete/$', post_delete, name='post_delete'),
     re_path(r'^post/(?P<pk>[0-9]+)/edit/$', post_edit, name='post_edit'),
     re_path(r'^tag/(?P<pk>\d+)/$', tag, name="tag"),
+    re_path(r'^nearby/(?P<pk>\d+)/$', post_nearby, name="post_nearby"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

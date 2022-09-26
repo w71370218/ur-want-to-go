@@ -14,6 +14,7 @@
         <meta property="og:title" content="{{ post.title }} | 想玩的地點"/>
         <meta property="og:description" content="{{ post.text|slice:":35" }}"/>
         <meta property="og:image" content="{{ post.imgur_url }}"/>
+        <meta name="referrer" content="no-referrer"/>
 </head>
 <div class="container">
 	<div class="post-detail">
@@ -102,16 +103,44 @@
 </div>
 <div class="post-innertext">
     <p>{{ post.text | markdown | safe | linebreaks }}</p>
-    <div><h1>附近十公里以內的點</h1></div>
-    {% for item in nearby %}
-    <div>
-        <a href="{% url 'post_detail' pk=item.pk %}">
-        <div>{{item.title}}</div>
-        <div>{{item.location}}</div>
-        <div>{{item.distance}}</div>
-        </a>
+    <div class="b-example-divider"></div>
+    <div class=" px-4 py-5">
+        <div class="pb-2 border-bottom "><h2>附近十公里以內的點</h2></div>
+        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+            {% for item in nearby %}
+            {% if forloop.counter == 4 %}
+            <div class="col">
+                <a href="{% url 'post_nearby' pk=post.pk %}">
+                    <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background: url({{ item.imgur_url }});">
+                        <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                            <h1 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">查看更多</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% else %}
+            <div class="col">
+                <a href="{% url 'post_detail' pk=item.pk %}">
+                    <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background: url({{ item.imgur_url }});">
+                        <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">{{item.title}}</h2>
+                            <ul class="list-unstyled mt-auto">
+                                <li class="d-flex align-items-center me-3">
+                                    <span class="glyphicon bi me-2">&#xe062;</span>
+                                  <small>{{item.location}}</small>
+                                </li>
+                                <li class="d-flex align-items-center">
+                                  <small>{{item.distance}}</small>
+                                </li>
+                              </ul>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
     </div>
-    {% endfor %}
     <div class="text-center" style="height: 100%;">
         {{ my_map|safe }}
     </div>
