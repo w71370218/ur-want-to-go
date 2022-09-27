@@ -12,7 +12,7 @@
 		<p>Welcome, {{ user.username }}</p>
 	{% endif %}
 	<h2><b>{{ post_name.title }}</b> 附近十公里以內的點</h2>
-        <p>總共有 {{ post_count }} 筆資料</p>
+        <p>總共有 <span id="post_num">{{ post_count }}</span> 筆資料</p>
     {% if messages %}
     <ul class="massages">
         {% for message in messages %}

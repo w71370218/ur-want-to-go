@@ -4,15 +4,18 @@ function query() {
 
 $(document).ready(function () {
     //nearby 
-    attractions = document.getElementsByClassName("category-1")
+    post_num = document.getElementById("post_num");
+    attractions = document.getElementsByClassName("category-1");
     $("#attraction").click(function () {
         if ($(this).prop("checked")) {
             for (let index = 0; index < attractions.length; index++) {
                 attractions[index].style = "display:block;";
+                post_num.innerText = String(parseInt(post_num.innerText) + 1);
             }
         } else {
             for (let index = 0; index < attractions.length; index++) {
                 attractions[index].style = "display:none;";
+                post_num.innerText = String(parseInt(post_num.innerText) - 1);
             }
         }
     });
@@ -21,10 +24,12 @@ $(document).ready(function () {
         if ($(this).prop("checked")) {
             for (let index = 0; index < accomodations.length; index++) {
                 accomodations[index].style = "display:block;";
+                post_num.innerText = String(parseInt(post_num.innerText) + 1);
             }
         } else {
             for (let index = 0; index < accomodations.length; index++) {
                 accomodations[index].style = "display:none;";
+                post_num.innerText = String(parseInt(post_num.innerText) - 1);
             }
         }
     });
@@ -33,10 +38,12 @@ $(document).ready(function () {
         if ($(this).prop("checked")) {
             for (let index = 0; index < restaurants.length; index++) {
                 restaurants[index].style = "display:block;";
+                post_num.innerText = String(parseInt(post_num.innerText) + 1);
             }
         } else {
             for (let index = 0; index < restaurants.length; index++) {
                 restaurants[index].style = "display:none;";
+                post_num.innerText = String(parseInt(post_num.innerText) - 1);
             }
         }
     });
