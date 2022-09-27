@@ -263,10 +263,7 @@ h5 {
     padding-bottom: 3rem !important;
 }
 
-.card:hover,
-.card::before {
-    background-size: 200% !important;
-}
+
 
 @media screen and (min-width:720px) {
     .row {
