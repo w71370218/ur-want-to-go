@@ -142,13 +142,12 @@ def home(request):
 				{img}
 				</a></div>"""
 
-            match post.category:
-                case 1:
-                    color = 'red'
-                case 2:
-                    color = 'blue'
-                case 3:
-                    color = 'green'
+            if post.category == 1:
+                color = 'red'
+            elif post.category == 2:
+                color = 'green'
+            elif post.category == 3:
+                color = 'blue'
             icon_config = False
 
             if tag_list:
@@ -161,13 +160,12 @@ def home(request):
                         icon_config = True
                         break
             if not icon_config:
-                match post.category:
-                    case 1:
-                        icon = ''
-                    case 2:
-                        icon = 'bed'
-                    case 3:
-                        icon = 'cutlery'
+                if post.category == 1:
+                    icon = ''
+                elif post.category == 2:
+                    icon = 'bed'
+                elif post.category == 3:
+                    icon = 'cutlery'
                 m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=folium.Icon(
                     icon=icon, color=color, prefix='fa'))  # 使用Font Awesome Icons
             m2.add_to(mCluster)
@@ -409,13 +407,12 @@ def post_detail(request, pk):
         popup = popup + '<img src="' + "/media/no_image.jpg" + \
             '" style="width:350px;"></a></div>'
 
-    match post.category:
-        case 1:
-            color = 'red'
-        case 2:
-            color = 'blue'
-        case 3:
-            color = 'green'
+    if post.category == 1:
+        color = 'red'
+    elif post.category == 2:
+        color = 'green'
+    elif post.category == 3:
+        color = 'blue'
     icon_config = False
 
     if ordered_tag:
@@ -428,13 +425,12 @@ def post_detail(request, pk):
                 icon_config = True
                 break
     if not icon_config:
-        match post.category:
-            case 1:
-                icon = ''
-            case 2:
-                icon = 'bed'
-            case 3:
-                icon = 'cutlery'
+        if post.category == 1:
+            icon = ''
+        elif post.category == 2:
+            icon = 'bed'
+        elif post.category == 3:
+            icon = 'cutlery'
         m2 = folium.Marker(location=[post.lat, post.lng], popup=popup, icon=folium.Icon(
             icon=icon, color=color, prefix='fa'))
 
