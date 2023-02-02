@@ -109,13 +109,13 @@ def home(request):
             for tp in tag_post:
                 tag = Tag.objects.get(id=tp.tag.id)
                 tag_list.append(tag)
-                tags_element = f'''
+                tags_element = f"""
 					<span><a href="/tag/{ tag.pk }" class="badge badge-secondary" target="_parent" style="background-color: { tag.color }; color:#fff; font-size: 40px;">{ tag.name } </a></span>
-				'''
+				"""
                 tags_elements = tags_elements + tags_element
-            tag_group = f'''
+            tag_group = f"""
 				<div class="tag-group" style="max-height:45px; overflow:hidden;">{ tags_elements }</div>
-			'''
+			"""
 
             # stars
             star = ''
@@ -124,14 +124,14 @@ def home(request):
                     star = star + '★'
                 else:
                     star = star + '☆'
-            stars = f'''<span style="color:#ffbb04; font-size:40px">{star}</span>'''
+            stars = f"""<span style="color:#ffbb04; font-size:40px">{star}</span>"""
 
             if post.imgur_url:
                 img = '<img src="' + post.imgur_url + '" style="width:500px;">'
             else:
                 img = '<img src="' + "/media/no_image.jpg" + '" style="width:500px;">'
 
-            popup = f'''<div class="popup">
+            popup = f"""<div class="popup">
 				<a href="/post/{str(post.pk)}" target="_parent" style="text-decoration: none; color:#000">
 				<h1 style="font-size: 80px; max-height:170px; overflow:hidden;">{post.title}</h1>
 				</a>
@@ -140,7 +140,7 @@ def home(request):
 				<h4 style="font-size: 45px;">{post.location} </h4>
 				<h4 style="font-size: 45px;">想去指數: {stars} </h4>
 				{img}
-				</a></div>'''
+				</a></div>"""
 
             match post.category:
                 case 1:
@@ -380,11 +380,11 @@ def post_detail(request, pk):
     for tp in tag_post:
         tag = Tag.objects.get(id=tp.tag.id)
         ordered_tag.append(tag)
-        tags_element = f'''<span><a href="/tag/{ tag.pk }" class="badge badge-secondary" target="_parent" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>'''
+        tags_element = f"""<span><a href="/tag/{ tag.pk }" class="badge badge-secondary" target="_parent" style="background-color: { tag.color }; color:#fff;">{ tag.name } </a></span>"""
         tags_elements = tags_elements + tags_element
-    tag_group = f'''
+    tag_group = f"""
 		<div class="tag-group">{ tags_elements }</div>
-	'''
+	"""
     post.taglist = ordered_tag
 
     # folium map
